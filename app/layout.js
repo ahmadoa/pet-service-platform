@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
-import "../styles/globals.css";
+import "@/styles/globals.css";
 import { cn } from "@/lib/utils";
+import Navbar from "@/components/navbar";
 
 export const fontSans = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -14,10 +15,11 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased",
+          "min-h-screen bg-background font-sans antialiased flex flex-col py-3",
           fontSans.variable
         )}
       >
+        <Navbar />
         {children}
       </body>
     </html>
