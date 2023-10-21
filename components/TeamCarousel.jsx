@@ -14,7 +14,7 @@ export const EmblaCarousel = ({ Team }) => {
       <div className="h-full w-full flex gap-5 touch-pan-y">
         {Team.map((member) => {
           return (
-            <div className="h-full flex flex-col gap-1 slide">
+            <div className="h-full flex flex-col gap-1 slide" key={member.name}>
               <div className="h-[80%]  rounded-lg overflow-hidden">
                 <Image
                   src={member.image}
