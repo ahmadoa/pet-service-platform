@@ -21,35 +21,6 @@ import { EmblaCarousel } from "@/components/TeamCarousel";
 import { useEffect, useState } from "react";
 import Spinner from "@/components/ui/spinner";
 
-// temporary data
-/*
-const Services = [
-  {
-    name: "Grooming",
-    image: grooming,
-    description:
-      "Indulge your pet with spa-like pampering and grooming for a happy, healthy look.",
-  },
-  {
-    name: "Training",
-    image: training,
-    description:
-      "Transform your dog into a well-behaved companion with personalized training.",
-  },
-  {
-    name: "Boarding",
-    image: boarding,
-    description:
-      "Provide your pet a cozy home away from home when you're away.",
-  },
-  {
-    name: "Daycare",
-    image: daycare,
-    description:
-      "Enrich your dog's life with socialization and exercise in a safe environment.",
-  },
-];*/
-
 const Team = [
   {
     name: "Ariola Granola",
