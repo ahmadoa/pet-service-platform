@@ -18,6 +18,9 @@ module.exports = {
       },
     },
     extend: {
+      spacing: {
+        "under-nav": "calc(100vh - 3.5rem)",
+      },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
       },

@@ -5,7 +5,8 @@ import {
   onAuthStateChanged,
   GoogleAuthProvider,
 } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
+import { doc, setDoc } from "firebase/firestore";
 
 const AuthContext = createContext();
 
@@ -14,7 +15,21 @@ export const AuthContextProvider = ({ children }) => {
 
   const googleSignIn = () => {
     const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider);
+    signInWithPopup(auth, provider).then(async (res) => {
+      const userId = res.user.uid;
+      const newUserRef = doc(db, "users", userId);
+      try {
+        await setDoc(newUserRef, {
+          id: userId,
+          username: res.user.displayName,
+          email: res.user.email,
+          profileURL: res.user.photoURL,
+          created_at: res.user.metadata.creationTime,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    });
   };
   const logOut = () => {
     signOut(auth);

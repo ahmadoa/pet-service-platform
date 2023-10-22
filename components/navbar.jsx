@@ -43,7 +43,7 @@ export default function Navbar() {
 
   useEffect(() => {
     const checkAuth = async () => {
-      await new Promise((resolve) => setTimeout(resolve, 700));
+      await new Promise((resolve) => setTimeout(resolve, 500));
       setLoading(false);
     };
     checkAuth();
@@ -51,7 +51,7 @@ export default function Navbar() {
 
   return (
     <motion.div
-      className="h-11 flex mx-7 justify-between items-center"
+      className="h-11 flex mx-7 mt-3 justify-between items-center"
       animate={{
         opacity: 1,
       }}

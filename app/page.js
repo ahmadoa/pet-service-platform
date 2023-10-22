@@ -20,6 +20,7 @@ import Scroll from "@/components/ui/scroll";
 import { EmblaCarousel } from "@/components/TeamCarousel";
 import { useEffect, useState } from "react";
 import Spinner from "@/components/ui/spinner";
+import { UserAuth } from "@/context/AuthContext";
 
 const Team = [
   {
@@ -56,6 +57,15 @@ const Team = [
 
 export default function Home() {
   const [services, setServices] = useState([]);
+  const { user, googleSignIn } = UserAuth();
+
+  const handleSignIn = async () => {
+    try {
+      await googleSignIn();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const getServices = () => {
     fetch("/api/services", {
@@ -86,9 +96,15 @@ export default function Home() {
             <div className="text-sm text-secondary-foreground capitalize">
               Welcome to Pawpal - Where Tails Wag and Hearts Are Happy!
             </div>
-            <Button className="w-fit font-semibold">
-              Book An Appointement
-            </Button>
+            {!user ? (
+              <Button className="w-fit font-semibold capitalize" onClick={handleSignIn}>
+                Embark on a new journey
+              </Button>
+            ) : (
+              <Button className="w-fit font-semibold capitalize">
+                Book An Appointement
+              </Button>
+            )}
           </div>
         </div>
         {/* grid col 2*/}
