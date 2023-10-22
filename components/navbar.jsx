@@ -14,15 +14,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import Router from "next/router";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function Navbar() {
   const { user, googleSignIn, logOut } = UserAuth();
   const [loading, setLoading] = useState(true);
   const pathname = usePathname();
+  const router = useRouter();
 
   const handleSignIn = async () => {
     try {
@@ -35,7 +35,7 @@ export default function Navbar() {
   const handleSignOut = async () => {
     try {
       await logOut();
-      Router.push("/");
+      router.push("/");
     } catch (error) {
       console.log(error);
     }

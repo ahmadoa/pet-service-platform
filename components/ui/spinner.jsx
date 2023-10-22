@@ -4,6 +4,6 @@ import loadingAnimation from "@/public/loading_animation.json";
 
 export default function Scroll() {
   return (
-    <Lottie animationData={loadingAnimation} loop={true} className="w-14" />
+    <Lottie animationData={loadingAnimation} loop={true} className="w-60" />
   );
 }

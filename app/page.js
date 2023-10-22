@@ -1,3 +1,4 @@
+"use client";
 import heroIMG from "@/public/homepage/heroIMG.png";
 import boarding from "@/public/homepage/boarding.png";
 import daycare from "@/public/homepage/daycare.png";
@@ -17,8 +18,11 @@ import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import Scroll from "@/components/ui/scroll";
 import { EmblaCarousel } from "@/components/TeamCarousel";
+import { useEffect, useState } from "react";
+import Spinner from "@/components/ui/spinner";
 
 // temporary data
+/*
 const Services = [
   {
     name: "Grooming",
@@ -44,7 +48,7 @@ const Services = [
     description:
       "Enrich your dog's life with socialization and exercise in a safe environment.",
   },
-];
+];*/
 
 const Team = [
   {
@@ -80,6 +84,24 @@ const Team = [
 ];
 
 export default function Home() {
+  const [services, setServices] = useState([]);
+
+  const getServices = () => {
+    fetch("/api/services", {
+      method: "GET",
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        setServices(data.productPriceData.data);
+      });
+  };
+
+  useEffect(() => {
+    getServices();
+  }, []);
+
   return (
     <div className="flex flex-col gap-5">
       {/* hero section */}
@@ -201,27 +223,39 @@ export default function Home() {
           </div>
         </div>
         {/* services elements */}
-        <div className="grid grid-cols-4 gap-4 h-[25rem]">
-          {Services.map(({ name, image, description }, index) => (
-            <div
-              className={`h-[90%] flex flex-col justify-between bg-card rounded-xl py-7 shadow-xl transition-all hover:scale-[103%] ${
-                index % 2 === 0 ? `self-start` : "self-end"
-              }`}
-            >
-              <div className="flex flex-col gap-3 px-3">
-                <div className="font-semibold text-lg text-primary">
-                  / {name}
+        {services.length === 0 ? (
+          <div className="h-[25rem] w-full flex justify-center items-center">
+            <Spinner />
+          </div>
+        ) : (
+          <div className="grid grid-cols-4 gap-4 h-[25rem]">
+            {services.map((serve, index) => (
+              <div
+                key={serve.id}
+                className={`h-[90%] flex flex-col justify-between bg-card rounded-xl py-7 shadow-xl transition-all hover:scale-[103%] ${
+                  index % 2 === 0 ? `self-start` : "self-end"
+                }`}
+              >
+                <div className="flex flex-col gap-3 px-3">
+                  <div className="font-semibold text-lg text-primary">
+                    / {serve.product.name}
+                  </div>
+                  <div className="pl-4 text-secondary-foreground leading-snug">
+                    {serve.product.description}
+                  </div>
                 </div>
-                <div className="pl-4 text-secondary-foreground leading-snug">
-                  {description}
+                <div className="w-9/12 h-24 rounded-e-xl overflow-hidden relative">
+                  <Image
+                    src={serve.product.images[0]}
+                    objectFit="cover"
+                    layout="fill"
+                    sizes=""
+                  />
                 </div>
               </div>
-              <div className="w-9/12 h-24 rounded-e-xl overflow-hidden">
-                <Image src={image} className="object-cover w-full h-full" />
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
       {/* team section */}
       <div className="h-[calc(100vh-7rem)] bg-primary/20 mt-5 flex flex-col gap-5 py-5 pl-7">
