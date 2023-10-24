@@ -4,6 +4,7 @@ import "@/styles/globals.css";
 import { cn } from "@/lib/utils";
 import Navbar from "@/components/navbar";
 import { AuthContextProvider } from "@/context/AuthContext";
+import { CookiesProvider } from "react-cookie";
 
 export const fontSans = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -17,8 +18,10 @@ export default function RootLayout({ children }) {
         )}
       >
         <AuthContextProvider>
-          <Navbar />
-          {children}
+          <CookiesProvider>
+            <Navbar />
+            {children}
+          </CookiesProvider>
         </AuthContextProvider>
       </body>
     </html>

@@ -1,4 +1,3 @@
-"use client";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
@@ -6,6 +5,7 @@ import { HiScissors } from "react-icons/hi2";
 import { FaDog } from "react-icons/fa";
 import { GiDogHouse, GiJumpingDog } from "react-icons/gi";
 import { motion } from "framer-motion";
+import { useCookies } from "react-cookie";
 
 const Icons = {
   Grooming: HiScissors,
@@ -14,14 +14,13 @@ const Icons = {
   Training: GiJumpingDog,
 };
 
-const ServiceStep = (props) => {
-  const searchParams = useSearchParams();
+const ServiceStep = ({ onStepNext }) => {
+  const [cookies, setCookie] = useCookies(["appointment"]);
   const [services, setServices] = useState([]);
   const [selectedService, setSelectedService] = useState(
-    searchParams.get("service") || "Grooming"
+    cookies.Service || "Grooming"
   );
   const [priceId, setPriceId] = useState("");
-  const router = useRouter();
 
   const getServices = () => {
     fetch("/api/services", {
@@ -81,14 +80,22 @@ const ServiceStep = (props) => {
       }
     });
     if (selectedService && priceId) {
-      router.push(`&service=${selectedService}&price_id=${priceId}`);
+      setCookie("Service", selectedService, {
+        path: "/book-appointment",
+        sameSite: "lax",
+      });
+      setCookie("PriceID", priceId, {
+        path: "/book-appointment",
+        sameSite: "lax",
+      });
+      onStepNext();
     }
   };
 
   return (
-    <div className="w-full h-full flex flex-col">
+    <div className="w-full h-full flex flex-col px-16">
       <div className="text-secondary-foreground/50 text-sm font-medium">
-        Step 2 of 4
+        Step 2 of 3
       </div>
       <div className="text-3xl font-bold">Select a service for your dog</div>
       <form
@@ -100,7 +107,7 @@ const ServiceStep = (props) => {
       >
         <motion.div
           key={services.length}
-          className="h-full grid grid-cols-4 gap-10 mt-8 mb-4 mx-16"
+          className="h-full grid grid-cols-4 gap-10 mt-8 mb-4 mx-10"
           onChange={onChangeValue}
           variants={variants}
           initial="hidden"

@@ -1,19 +1,15 @@
-"use client";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "./ui/button";
+import { useCookies } from "react-cookie";
 
-const DogInfo = (props) => {
-  const searchParams = useSearchParams();
-  const [name, setName] = useState(searchParams.get("name") || "");
-  const [breed, setBreed] = useState(searchParams.get("breed") || "");
-  const [allergies, setAllergies] = useState(
-    searchParams.get("allergies") || ""
-  );
+const DogInfo = ({ onStepNext }) => {
+  const [cookies, setCookie] = useCookies(["appointment"]);
+  const [name, setName] = useState(cookies.Name || "");
+  const [breed, setBreed] = useState(cookies.Breed || "");
+  const [allergies, setAllergies] = useState(cookies.Allergies || "");
 
   const [errors, setErrors] = useState({});
-
-  const router = useRouter();
 
   const validatePushAndMove = () => {
     const newErrors = {};
@@ -33,14 +29,20 @@ const DogInfo = (props) => {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      router.push(`?name=${name}&breed=${breed}&allergies=${allergies}`);
+      setCookie("Name", name, { path: "/book-appointment", sameSite: "lax" });
+      setCookie("Breed", breed, { path: "/book-appointment", sameSite: "lax" });
+      setCookie("Allergies", allergies, {
+        path: "/book-appointment",
+        sameSite: "lax",
+      });
+      onStepNext();
     }
   };
 
   return (
-    <div className="w-full h-full flex flex-col">
+    <div className="w-full h-full flex flex-col px-16">
       <div className="text-secondary-foreground/50 text-sm font-medium">
-        Step 1 of 4
+        Step 1 of 3
       </div>
       <div className="text-3xl font-bold">Tell Us About Your Dog</div>
       <form
@@ -50,7 +52,7 @@ const DogInfo = (props) => {
           validatePushAndMove();
         }}
       >
-        <div className="grid grid-cols-3 gap-10 mt-8">
+        <div className="grid grid-cols-2 gap-10 mt-8 mx-10">
           {/** dog name */}
           <div className="flex flex-col">
             <label
@@ -60,7 +62,7 @@ const DogInfo = (props) => {
               Dog's name
             </label>
             <input
-              className={` pl-2 h-10 rounded-lg outline outline-1 outline-secondary-foreground focus:outline-2 focus:outline-primary focus:shadow-lg focus:shadow-primary/10 transition-all ${
+              className={` pl-2 h-10 rounded-lg outline outline-2 outline-secondary-foreground/50 focus:outline-2 focus:outline-primary focus:shadow-lg focus:shadow-primary/10 transition-all ${
                 name.length > 0 ? "focus:outline-green-500" : ""
               }`}
               name="name"
@@ -81,7 +83,7 @@ const DogInfo = (props) => {
               Dog's breed
             </label>
             <input
-              className={` pl-2 h-10 rounded-lg outline outline-1 outline-secondary-foreground focus:outline-2 focus:outline-primary focus:shadow-lg focus:shadow-primary/10 transition-all ${
+              className={` pl-2 h-10 rounded-lg outline outline-2 outline-secondary-foreground/50 focus:outline-2 focus:outline-primary focus:shadow-lg focus:shadow-primary/10 transition-all ${
                 breed.length > 0 ? "focus:outline-green-500" : ""
               }`}
               name="name"
@@ -102,7 +104,7 @@ const DogInfo = (props) => {
               Allergies
             </label>
             <textarea
-              className={`pt-2 pl-2 rounded-lg outline outline-1 outline-secondary-foreground focus:outline-2 h-16 max-h-36 focus:outline-primary focus:shadow-lg focus:shadow-primary/10 transition-all ${
+              className={`pt-2 pl-2 rounded-lg outline outline-2 outline-secondary-foreground/50 focus:outline-2 h-16 max-h-36 focus:outline-primary focus:shadow-lg focus:shadow-primary/10 transition-all ${
                 allergies.length > 0 ? "focus:outline-green-500" : ""
               }`}
               name="name"
