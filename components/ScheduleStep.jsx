@@ -4,8 +4,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import { BsFillCalendarFill } from "react-icons/bs";
 import { Button } from "./ui/button";
 import { useCookies } from "react-cookie";
+import { motion } from "framer-motion";
 
-const ScheduleStep = ({ onStepNext }) => {
+const ScheduleStep = ({ onStepNext, onStepBack }) => {
   const [cookies, setCookie, removeCookie] = useCookies(["appointment"]);
 
   // selectedDate param & state
@@ -48,11 +49,6 @@ const ScheduleStep = ({ onStepNext }) => {
     getAppointments();
   }, []);
 
-  /*
-  useEffect(() => {
-    console.log(selectedDate.toISOString());
-  }, [selectedDate]);
-*/
   // timesByDay to execlude from datepicked based in appointments
   const excludeTimesByDay = {};
 
@@ -80,28 +76,28 @@ const ScheduleStep = ({ onStepNext }) => {
 
   const PushAndMove = () => {
     setCookie("Date", selectedDate.toISOString(), {
-      path: "/book-appointment",
+      path: "/",
       sameSite: "lax",
     });
     if (specialRequest.length === 0) {
       setCookie("Special", "None", {
-        path: "/book-appointment",
+        path: "/",
         sameSite: "lax",
       });
     } else {
       setCookie("Special", specialRequest, {
-        path: "/book-appointment",
+        path: "/",
         sameSite: "lax",
       });
     }
     if (cookies.Service === "Boarding") {
       setCookie("Duration", duration, {
-        path: "/book-appointment",
+        path: "/",
         sameSite: "lax",
       });
     } else {
       setCookie("Duration", 0, {
-        path: "/book-appointment",
+        path: "/",
         sameSite: "lax",
       });
     }
@@ -109,8 +105,46 @@ const ScheduleStep = ({ onStepNext }) => {
     onStepNext();
   };
 
+  const PushAndBack = () => {
+    setCookie("Date", selectedDate.toISOString(), {
+      path: "/",
+      sameSite: "lax",
+    });
+    if (specialRequest.length === 0) {
+      setCookie("Special", "None", {
+        path: "/",
+        sameSite: "lax",
+      });
+    } else {
+      setCookie("Special", specialRequest, {
+        path: "/",
+        sameSite: "lax",
+      });
+    }
+    if (cookies.Service === "Boarding") {
+      setCookie("Duration", duration, {
+        path: "/",
+        sameSite: "lax",
+      });
+    } else {
+      setCookie("Duration", 0, {
+        path: "/",
+        sameSite: "lax",
+      });
+    }
+
+    onStepBack();
+  };
+
   return (
-    <div className="w-full h-full flex flex-col px-16">
+    <motion.div
+      className="w-full h-full flex flex-col px-16"
+      initial={{ y: 100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{
+        duration: 0.5,
+      }}
+    >
       <div className="text-secondary-foreground/50 text-sm font-medium">
         Step 3 of 3
       </div>
@@ -196,13 +230,13 @@ const ScheduleStep = ({ onStepNext }) => {
           </div>
         </div>
         <div className="mt-5 w-full flex items-end justify-between">
-          <button type="button" className="font-semibold">
+          <button type="button" className="font-semibold" onClick={PushAndBack}>
             Back
           </button>
           <Button className="self-end font-semibold">Next</Button>
         </div>
       </form>
-    </div>
+    </motion.div>
   );
 };
 

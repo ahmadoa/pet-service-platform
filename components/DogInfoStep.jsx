@@ -1,7 +1,7 @@
-import { useSearchParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { useCookies } from "react-cookie";
+import { motion } from "framer-motion";
 
 const DogInfo = ({ onStepNext }) => {
   const [cookies, setCookie] = useCookies(["appointment"]);
@@ -29,10 +29,10 @@ const DogInfo = ({ onStepNext }) => {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      setCookie("Name", name, { path: "/book-appointment", sameSite: "lax" });
-      setCookie("Breed", breed, { path: "/book-appointment", sameSite: "lax" });
+      setCookie("Name", name, { path: "/", sameSite: "lax" });
+      setCookie("Breed", breed, { path: "/", sameSite: "lax" });
       setCookie("Allergies", allergies, {
-        path: "/book-appointment",
+        path: "/",
         sameSite: "lax",
       });
       onStepNext();
@@ -40,7 +40,14 @@ const DogInfo = ({ onStepNext }) => {
   };
 
   return (
-    <div className="w-full h-full flex flex-col px-16">
+    <motion.div
+      className="w-full h-full flex flex-col px-16"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{
+        duration: 0.5,
+      }}
+    >
       <div className="text-secondary-foreground/50 text-sm font-medium">
         Step 1 of 3
       </div>
@@ -121,7 +128,7 @@ const DogInfo = ({ onStepNext }) => {
           <Button className="self-end font-semibold">Next</Button>
         </div>
       </form>
-    </div>
+    </motion.div>
   );
 };
 

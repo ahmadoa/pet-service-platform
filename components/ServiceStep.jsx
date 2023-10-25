@@ -1,4 +1,3 @@
-import { useSearchParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { HiScissors } from "react-icons/hi2";
@@ -14,29 +13,12 @@ const Icons = {
   Training: GiJumpingDog,
 };
 
-const ServiceStep = ({ onStepNext }) => {
+const ServiceStep = ({ onStepNext, onStepBack }) => {
   const [cookies, setCookie] = useCookies(["appointment"]);
-  const [services, setServices] = useState([]);
   const [selectedService, setSelectedService] = useState(
     cookies.Service || "Grooming"
   );
   const [priceId, setPriceId] = useState("");
-
-  const getServices = () => {
-    fetch("/api/services", {
-      method: "GET",
-    })
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        setServices(data.productPriceData.data);
-      });
-  };
-
-  useEffect(() => {
-    getServices();
-  }, []);
 
   function onChangeValue(event) {
     setSelectedService(event.target.value);
@@ -73,6 +55,24 @@ const ServiceStep = ({ onStepNext }) => {
     },
   };
 
+  const [services, setServices] = useState([]);
+
+  const getServices = () => {
+    fetch("/api/services", {
+      method: "GET",
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        setServices(data.productPriceData.data);
+      });
+  };
+
+  useEffect(() => {
+    getServices();
+  }, []);
+
   const PushAndMove = () => {
     services.map((serve) => {
       if (serve.product.name === selectedService) {
@@ -81,19 +81,45 @@ const ServiceStep = ({ onStepNext }) => {
     });
     if (selectedService && priceId) {
       setCookie("Service", selectedService, {
-        path: "/book-appointment",
+        path: "/",
         sameSite: "lax",
       });
       setCookie("PriceID", priceId, {
-        path: "/book-appointment",
+        path: "/",
         sameSite: "lax",
       });
       onStepNext();
     }
   };
 
+  const PushAndBack = () => {
+    services.map((serve) => {
+      if (serve.product.name === selectedService) {
+        setPriceId(serve.id);
+      }
+    });
+    if (selectedService && priceId) {
+      setCookie("Service", selectedService, {
+        path: "/",
+        sameSite: "lax",
+      });
+      setCookie("PriceID", priceId, {
+        path: "/",
+        sameSite: "lax",
+      });
+      onStepBack();
+    }
+  };
+
   return (
-    <div className="w-full h-full flex flex-col px-16">
+    <motion.div
+      className="w-full h-full flex flex-col px-16"
+      initial={{ y: 100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{
+        duration: 0.5,
+      }}
+    >
       <div className="text-secondary-foreground/50 text-sm font-medium">
         Step 2 of 3
       </div>
@@ -139,13 +165,13 @@ const ServiceStep = ({ onStepNext }) => {
           ))}
         </motion.div>
         <div className="mt-5 w-full flex items-end justify-between">
-          <button type="button" className="font-semibold">
+          <button type="button" className="font-semibold" onClick={PushAndBack}>
             Back
           </button>
           <Button className="self-end font-semibold">Next</Button>
         </div>
       </form>
-    </div>
+    </motion.div>
   );
 };
 

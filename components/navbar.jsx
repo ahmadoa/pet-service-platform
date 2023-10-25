@@ -61,7 +61,7 @@ export default function Navbar() {
     >
       <div className="flex gap-5 items-center">
         <Link href={"/"}>
-          <Image src={Logo} className="rotate-[30deg] w-8" />
+          <Image src={Logo} className="rotate-[30deg] w-8" alt="navbar logo" />
         </Link>
         {loading ? null : !user ? null : (
           <motion.div
@@ -85,9 +85,9 @@ export default function Navbar() {
               className={`${
                 pathname === "/orders" ? "font-bold " : ""
               }  transition-all hover:scale-105`}
-              href={"/orders"}
+              href={"/appointments"}
             >
-              Orders
+              Appointments
             </Link>
             <Link
               className={`${

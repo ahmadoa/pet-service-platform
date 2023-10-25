@@ -21,6 +21,7 @@ import { EmblaCarousel } from "@/components/TeamCarousel";
 import { useEffect, useState } from "react";
 import Spinner from "@/components/ui/spinner";
 import { UserAuth } from "@/context/AuthContext";
+import Link from "next/link";
 
 const Team = [
   {
@@ -87,6 +88,7 @@ export default function Home() {
     <div className="flex flex-col gap-5">
       {/* hero section */}
       <div className={`h-[calc(100vh-4rem)] grid grid-cols-3 mx-7 gap-6 pt-3`}>
+        
         {/* grid col 1*/}
         <div className="flex flex-col justify-between mt-20">
           <div className="flex flex-col gap-5">
@@ -97,13 +99,18 @@ export default function Home() {
               Welcome to Pawpal - Where Tails Wag and Hearts Are Happy!
             </div>
             {!user ? (
-              <Button className="w-fit font-semibold capitalize" onClick={handleSignIn}>
+              <Button
+                className="w-fit font-semibold capitalize"
+                onClick={handleSignIn}
+              >
                 Embark on a new journey
               </Button>
             ) : (
-              <Button className="w-fit font-semibold capitalize">
-                Book An Appointement
-              </Button>
+              <Link href="/book-appointment">
+                <Button className="w-fit font-semibold capitalize">
+                  Book An Appointement
+                </Button>
+              </Link>
             )}
           </div>
         </div>
@@ -276,7 +283,11 @@ export default function Home() {
               Contact us for further information
             </Button>
           </div>
-          <Image src={foot_3} className="w-5/6 self-center" />
+          <Image
+            src={foot_3}
+            className="w-5/6 self-center"
+            alt="footer bg picture"
+          />
         </div>
         <div className="h-5/6 w-full bg-white rounded-2xl overflow-hidden self-end shadow-lg">
           <Image
