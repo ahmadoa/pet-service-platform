@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import Logo from "@/public/logo.svg";
 import Image from "next/image";
 import ScheduleStep from "@/components/ScheduleStep";
-import AppointmentDetails from "@/components/AppointmentDetails";
+import AppointmentDetails from "@/components/AppointmentDetailsStep";
 
 export default function Appointement() {
   const [activeTab, setActiveTab] = useState(0);

@@ -106,7 +106,7 @@ export default function Home() {
                 Embark on a new journey
               </Button>
             ) : (
-              <Link href="/book-appointment">
+              <Link href="/book-appointment" prefetch>
                 <Button className="w-fit font-semibold capitalize">
                   Book An Appointement
                 </Button>

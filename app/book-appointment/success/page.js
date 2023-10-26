@@ -18,7 +18,6 @@ function Success() {
   // get cookies
   const [cookies, setCookie, removeCookie] = useCookies(["appointment"]);
   const [loaded, setLoaded] = useState(false);
-  const [response, setResponse] = useState("");
 
   // get session_id param
   const params = useSearchParams();
@@ -27,8 +26,8 @@ function Success() {
 
   const session = params.get("session_id");
 
-  const getSession = async (ses) => {
-    if (ses) {
+  const getSession = async (ses, cook) => {
+    if (ses && cook) {
       const res = await stripe.checkout.sessions.retrieve(ses);
       if (res.payment_status === "paid") {
         const response = await fetch("/api/orders", {
@@ -52,6 +51,14 @@ function Success() {
         });
         if (response.ok) {
           const data = await response.json();
+          removeCookie("Allergies", { path: "/" });
+          removeCookie("Breed", { path: "/" });
+          removeCookie("Date", { path: "/" });
+          removeCookie("Duration", { path: "/" });
+          removeCookie("Name", { path: "/" });
+          removeCookie("PriceID", { path: "/" });
+          removeCookie("Service", { path: "/" });
+          removeCookie("Special", { path: "/" });
           console.log("data was added successfully");
         } else {
           console.error("Failed to fetch data:", response.status);
@@ -69,7 +76,7 @@ function Success() {
       setLoaded(true);
     }
     if (loaded) {
-      getSession(session);
+      getSession(session, cookies.Name);
     }
   }, [loaded, user]);
 
@@ -87,21 +94,29 @@ function Success() {
         alt="Logo decoration 2"
         priority
       />
-      <SuccessAnim />
-      <div className="text-xl font-bold">Appointment Booked Successfully!</div>
-      <p className="w-2/6 text-sm text-center font-medium text-secondary-foreground/60">
-        Thank you for booking At Pawpal! Your order is confirmed, and we can't
-        wait to pamper your furry friend. Have questions or special requests?
-        Feel free to reach out in the orders page.
-      </p>
-      <div className="flex gap-5 items-center font-medium">
-        <Link href="/book-appointment">
-          <Button variant="outline">Schedule Another Appointment</Button>
-        </Link>
-        <Link href="/appointments">
-          <Button>Track your appointments</Button>
-        </Link>
-      </div>
+      {cookies.Name && session ? (
+        <>
+          <SuccessAnim />
+          <div className="text-xl font-bold">
+            Appointment Booked Successfully!
+          </div>
+          <p className="w-2/6 text-sm text-center font-medium text-secondary-foreground/60">
+            Thank you for booking At Pawpal! Your order is confirmed, and we
+            can't wait to pamper your furry friend. Have questions or special
+            requests? Feel free to reach out in the orders page.
+          </p>
+          <div className="flex gap-5 items-center font-medium">
+            <Link href="/book-appointment" prefetch>
+              <Button variant="outline">Schedule Another Appointment</Button>
+            </Link>
+            <Link href="/appointments" prefetch>
+              <Button>Track your appointments</Button>
+            </Link>
+          </div>
+        </>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }

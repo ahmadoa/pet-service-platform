@@ -60,7 +60,7 @@ export default function Navbar() {
       }}
     >
       <div className="flex gap-5 items-center">
-        <Link href={"/"}>
+        <Link href={"/"} prefetch>
           <Image src={Logo} className="rotate-[30deg] w-8" alt="navbar logo" />
         </Link>
         {loading ? null : !user ? null : (
@@ -78,6 +78,7 @@ export default function Navbar() {
                 pathname === "/" ? "font-bold " : ""
               }  transition-all hover:scale-105`}
               href={"/"}
+              prefetch
             >
               Home
             </Link>
@@ -86,6 +87,7 @@ export default function Navbar() {
                 pathname === "/orders" ? "font-bold " : ""
               }  transition-all hover:scale-105`}
               href={"/appointments"}
+              prefetch
             >
               Appointments
             </Link>
@@ -94,6 +96,7 @@ export default function Navbar() {
                 pathname === "/contact" ? "font-bold " : ""
               }  transition-all hover:scale-105`}
               href={"/contact"}
+              prefetch
             >
               Contact Us
             </Link>
