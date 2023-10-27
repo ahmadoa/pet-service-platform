@@ -53,7 +53,7 @@ const ScheduleStep = ({ onStepNext, onStepBack }) => {
   const excludeTimesByDay = {};
 
   appointments.forEach((appointment) => {
-    const appointmentDate = new Date(appointment.date);
+    const appointmentDate = new Date(appointment.Date);
     const year = appointmentDate.getFullYear();
     const month = appointmentDate.getMonth();
     const day = appointmentDate.getDate();

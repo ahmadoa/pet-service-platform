@@ -6,6 +6,7 @@ import { HiScissors } from "react-icons/hi2";
 import { FaDog } from "react-icons/fa";
 import { GiDogHouse, GiJumpingDog } from "react-icons/gi";
 import OrderDetails from "@/components/OrderDetails";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const Icons = {
   Grooming: HiScissors,
@@ -16,8 +17,13 @@ const Icons = {
 
 function Appointment() {
   const { user } = UserAuth();
+  const router = useRouter();
+  const params = useSearchParams();
 
-  const [selectedData, setSelectedData] = useState({});
+  const [selectedAppointment, setSelectedAppointment] = useState(
+    params.get("id") || ""
+  );
+  const [currUser, setCurrUser] = useState("");
   const [appointments, setAppointments] = useState([]);
 
   const RetrieveAppointments = () => {
@@ -34,6 +40,7 @@ function Appointment() {
   useEffect(() => {
     if (user) {
       RetrieveAppointments();
+      setCurrUser(user.uid);
     }
   }, [user]);
 
@@ -47,10 +54,10 @@ function Appointment() {
   };
 
   return (
-    <div className="w-full h-full grid grid-cols-12 gap-5">
+    <div className="w-full h-full grid grid-cols-12 gap-1">
       {appointments ? (
         <>
-          <div className="col-span-3">
+          <div className="h-full col-span-3">
             <div className="h-full flex flex-col gap-3">
               <div className="w-full h-12 flex items-center text-lg bg-card rounded-xl font-bold p-5 shadow-sm">
                 All Appointments
@@ -58,18 +65,23 @@ function Appointment() {
               <div className="h-full flex flex-col gap-3 overflow-scroll">
                 {appointments.map((appointment) => (
                   <div
+                    key={appointment.orderId}
                     className={`w-full h-[4.5rem] flex gap-2 ${
-                      selectedData.orderId === appointment.orderId
+                      selectedAppointment === appointment.orderId
                         ? "bg-muted"
                         : "bg-card"
                     } bg-card hover:bg-muted transition-all rounded-xl font-semibold p-2 shadow-sm relative cursor-pointer`}
                     onClick={() => {
-                      setSelectedData(appointment);
+                      router.push(`/appointments?id=${appointment.orderId}`, {
+                        shallow: true,
+                      });
+                      setSelectedAppointment(appointment.orderId);
+                      setCurrUser(appointment.userId);
                     }}
                   >
                     <div
                       className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 transition-all w-4/6 h-1 rounded-t-full ${
-                        selectedData.orderId === appointment.orderId
+                        selectedAppointment === appointment.orderId
                           ? "bg-orange-500"
                           : "bg-card"
                       }`}
@@ -94,14 +106,14 @@ function Appointment() {
                       <div className="flex gap-1 items-center">
                         <div
                           className={`w-2 h-2 rounded-full ${
-                            appointment.Status === "fulfilled"
+                            appointment.Status === "Fulfilled"
                               ? "bg-green-600"
                               : "bg-primary"
                           } `}
                         />
                         <div
                           className={`${
-                            appointment.Status === "fulfilled"
+                            appointment.Status === "Fulfilled"
                               ? "text-green-600"
                               : "text-primary"
                           } font-semibold text-sm uppercase`}
@@ -115,8 +127,12 @@ function Appointment() {
               </div>
             </div>
           </div>
-          <div className="col-span-9 bg-card rounded-l-xl">
-            <OrderDetails orderData={selectedData} />
+          <div className="h-full col-span-9 pb-14">
+            {selectedAppointment.length > 0 && currUser.length > 0 ? (
+              <OrderDetails orderId={selectedAppointment} userId={currUser} />
+            ) : (
+              <></>
+            )}
           </div>
         </>
       ) : (

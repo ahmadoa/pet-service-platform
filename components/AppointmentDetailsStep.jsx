@@ -82,7 +82,7 @@ function AppointmentDetails({ onStepBack }) {
   const redirectToCheckout = async () => {
     const stripe = await getStripe();
 
-    const { error} = await stripe.redirectToCheckout(checkoutOptions);
+    const { error } = await stripe.redirectToCheckout(checkoutOptions);
     console.log("Stripe checkout error", error);
   };
 
@@ -170,7 +170,7 @@ function AppointmentDetails({ onStepBack }) {
             <div>Price (per session):</div>
             <div className="font-semibold">{matchingPrice / 100} $</div>
           </div>
-          {quantity > 0 ? (
+          {service === "Boarding" ? (
             <div className="flex justify-between">
               <div>Duration (days):</div>
               <div className="font-semibold">{quantity}</div>
