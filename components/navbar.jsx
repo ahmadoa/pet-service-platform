@@ -78,25 +78,38 @@ export default function Navbar() {
                 pathname === "/" ? "font-bold " : ""
               }  transition-all hover:scale-105`}
               href={"/"}
-              prefetch
             >
               Home
             </Link>
             <Link
               className={`${
-                pathname === "/orders" ? "font-bold " : ""
+                pathname === "/book-appointment" ? "font-bold " : ""
+              }  transition-all hover:scale-105`}
+              href={"/book-appointment"}
+            >
+              Book Appointment
+            </Link>
+            <Link
+              className={`${
+                pathname === "/appointments" ? "font-bold " : ""
               }  transition-all hover:scale-105`}
               href={"/appointments"}
-              prefetch
             >
               Appointments
+            </Link>
+            <Link
+              className={`${
+                pathname === "/archives" ? "font-bold " : ""
+              }  transition-all hover:scale-105`}
+              href={"/archives"}
+            >
+              Archives
             </Link>
             <Link
               className={`${
                 pathname === "/contact" ? "font-bold " : ""
               }  transition-all hover:scale-105`}
               href={"/contact"}
-              prefetch
             >
               Contact Us
             </Link>

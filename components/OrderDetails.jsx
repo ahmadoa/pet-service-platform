@@ -1,13 +1,15 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
-import Chatbg from "@/public/chatbg.jpg";
+import { useToast } from "@/components/ui/use-toast";
+import { cn } from "@/lib/utils";
 
 export default function OrderDetails({ orderId, userId }) {
   const [appointment, setAppointment] = useState({});
   const [disableCancel, setDisableCancel] = useState(false);
   const quantity = appointment.Duration ? Number(appointment.Duration) : 1;
   const date = new Date(appointment.Date);
+  const { toast } = useToast();
 
   const RetrieveAppointment = () => {
     fetch(`/api/order?userId=${userId}&orderId=${orderId}`, {
@@ -16,6 +18,9 @@ export default function OrderDetails({ orderId, userId }) {
       .then((response) => response.json())
       .then((data) => {
         setAppointment(data);
+      })
+      .then(() => {
+        console.log(appointment.Status);
       });
   };
 
@@ -36,6 +41,36 @@ export default function OrderDetails({ orderId, userId }) {
       setDisableCancel(isButtonDisabled);
     }
   }, [appointment]);
+
+  const handleArchive = async () => {
+    const response = await fetch("/api/archives", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        orderId: appointment.orderId,
+        userId: appointment.userId,
+      }),
+    });
+    if (response.ok) {
+      console.log("archived successfully!");
+      toast({
+        className: cn(
+          "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4"
+        ),
+        title: "Archived Appointment Successfully!",
+        description: "You've archived an appointment successfully",
+      });
+    } else {
+      console.log("failed to archive!");
+      toast({
+        className: cn(
+          "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4"
+        ),
+        title: "Failed To Archived Appointment!",
+        description: "Appointment archive failed",
+      });
+    }
+  };
 
   return (
     <div className="w-full h-full px-5">
@@ -134,6 +169,7 @@ export default function OrderDetails({ orderId, userId }) {
                     disabled={
                       appointment.Status === "On Process" ? true : false
                     }
+                    onClick={handleArchive}
                   >
                     Archive appointment
                   </Button>
@@ -148,12 +184,7 @@ export default function OrderDetails({ orderId, userId }) {
             value="messages"
             className="h-full bg-card rounded-xl p-5"
           >
-            <div
-              style={{
-                backgroundImage: `url(${Chatbg})`,
-              }}
-              className="w-full h-full bg-chat bg-no-repeat bg-cover rounded-2xl"
-            ></div>
+            <div className="w-full h-full bg-chat bg-no-repeat bg-cover rounded-2xl"></div>
           </TabsContent>
         </Tabs>
       ) : (
