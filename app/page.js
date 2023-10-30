@@ -23,42 +23,10 @@ import Spinner from "@/components/ui/spinner";
 import { UserAuth } from "@/context/AuthContext";
 import Link from "next/link";
 
-const Team = [
-  {
-    name: "Ariola Granola",
-    profession: "Pet sitter",
-    image: boarding,
-  },
-  {
-    name: "Kehlani Bey",
-    profession: "Dog groomer",
-    image: training,
-  },
-  {
-    name: "Ammar Wiy",
-    profession: "Pet sitter",
-    image: foot_1,
-  },
-  {
-    name: "Mary Ketle",
-    profession: "Canine Coach",
-    image: daycare,
-  },
-  {
-    name: "Jake Peralta",
-    profession: "Daycare attendant",
-    image: grooming,
-  },
-  {
-    name: "Jake Peralta",
-    profession: "Dog Groomer",
-    image: foot_2,
-  },
-];
-
 export default function Home() {
   const [services, setServices] = useState([]);
   const { user, googleSignIn } = UserAuth();
+  const [team, setTeam] = useState([]);
 
   const handleSignIn = async () => {
     try {
@@ -80,15 +48,27 @@ export default function Home() {
       });
   };
 
+  const getTeam = () => {
+    fetch("/api/team", {
+      method: "GET",
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        setTeam(data);
+      });
+  };
+
   useEffect(() => {
     getServices();
+    getTeam();
   }, []);
 
   return (
     <div className="flex flex-col gap-5">
       {/* hero section */}
       <div className={`h-[calc(100vh-4rem)] grid grid-cols-3 mx-7 gap-6 pt-3`}>
-        
         {/* grid col 1*/}
         <div className="flex flex-col justify-between mt-20">
           <div className="flex flex-col gap-5">
@@ -261,7 +241,13 @@ export default function Home() {
         </div>
         {/* team members */}
         <div className="h-full w-full flex">
-          <EmblaCarousel Team={Team} />
+          {team.length === 0 ? (
+            <div className="h-[25rem] w-full flex justify-center items-center">
+              <Spinner />
+            </div>
+          ) : (
+            <EmblaCarousel Team={team} />
+          )}
         </div>
       </div>
       {/* footer section */}

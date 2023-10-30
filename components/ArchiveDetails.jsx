@@ -26,7 +26,7 @@ export default function ArchiveDetails({ orderId, userId }) {
     <div className="w-full h-full px-5">
       {Object.keys(archive).length > 0 && archive ? (
         <Tabs defaultValue="details" className="h-full w-full">
-          <div className="h-12 bg-secondary rounded-xl w-fit p-1 shadow-sm">
+          <div className="h-12 bg-card rounded-xl w-fit p-1 shadow-sm">
             <TabsList className="h-full w-fit flex gap-3 px-1 bg-transparent">
               <TabsTrigger value="details" className="h-full w-fit">
                 Appointment details
@@ -36,10 +36,7 @@ export default function ArchiveDetails({ orderId, userId }) {
               </TabsTrigger>
             </TabsList>
           </div>
-          <TabsContent
-            value="details"
-            className="h-full bg-secondary rounded-xl"
-          >
+          <TabsContent value="details" className="h-full bg-card rounded-xl">
             <div className="h-full grid grid-cols-2">
               {/** details section */}
               <div className="h-full flex flex-col gap-3 p-5">
@@ -117,9 +114,9 @@ export default function ArchiveDetails({ orderId, userId }) {
           </TabsContent>
           <TabsContent
             value="messages"
-            className="h-full bg-secondary rounded-xl p-5"
+            className="h-full bg-card rounded-xl p-5"
           >
-            <div className="w-full h-full bg-no-repeat bg-cover rounded-2xl"></div>
+            <div className="w-full h-full bg-chat bg-no-repeat bg-cover rounded-2xl"></div>
           </TabsContent>
         </Tabs>
       ) : (

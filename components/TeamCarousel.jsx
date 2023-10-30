@@ -11,20 +11,23 @@ export const EmblaCarousel = ({ Team }) => {
 
   return (
     <div className="w-fit overflow-hidden" ref={emblaRef}>
-      <div className="h-full w-full flex gap-5 touch-pan-y">
+      <div className="h-full w-full flex gap-5 touch-pan-y cursor-pointer">
         {Team.map((member) => {
           return (
-            <div className="h-full flex flex-col gap-1 slide" key={member.name}>
-              <div className="h-[80%]  rounded-lg overflow-hidden">
+            <div className="h-full flex flex-col gap-1 slide" key={member.id}>
+              <div className="h-[80%] rounded-lg overflow-hidden">
                 <Image
-                  src={member.image}
-                  className="w-full h-full object-cover"
+                  src={member.profile}
+                  className="h-full w-full object-cover"
+                  width={0}
+                  height={0}
+                  sizes="100vw"
                   alt={member.name}
                 />
               </div>
               <div className="flex flex-col leading-snug">
-                <div className="font-semibold">{member.name}</div>
-                <div className="text-secondary-foreground/50 text-sm">
+                <div className="font-semibold capitalize">{member.name}</div>
+                <div className="text-secondary-foreground/50 text-sm lowercase">
                   {member.profession}
                 </div>
               </div>
