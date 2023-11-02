@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
+import ChatComponent from "./ChatComponent";
 
 export default function OrderDetails({ orderId, userId }) {
   const [appointment, setAppointment] = useState({});
@@ -180,11 +181,11 @@ export default function OrderDetails({ orderId, userId }) {
               </div>
             </div>
           </TabsContent>
-          <TabsContent
-            value="messages"
-            className="h-full bg-card rounded-xl p-5"
-          >
-            <div className="w-full h-full bg-chat bg-no-repeat bg-cover rounded-2xl"></div>
+          <TabsContent value="messages" className="h-full bg-card rounded-xl">
+            <ChatComponent
+              userId={appointment.userId}
+              orderId={appointment.orderId}
+            />
           </TabsContent>
         </Tabs>
       ) : (
