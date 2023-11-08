@@ -22,6 +22,16 @@ import { useEffect, useState } from "react";
 import Spinner from "@/components/ui/spinner";
 import { UserAuth } from "@/context/AuthContext";
 import Link from "next/link";
+import {
+  BiPhoneCall,
+  BiLogoLinkedin,
+  BiLogoGithub,
+  BiLogoInstagram,
+  BiLogoGmail,
+  BiSolidMap,
+} from "react-icons/bi";
+import { useForm } from "react-hook-form";
+import { motion } from "framer-motion";
 
 export default function Home() {
   const [services, setServices] = useState([]);
@@ -65,10 +75,64 @@ export default function Home() {
     getTeam();
   }, []);
 
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitted },
+  } = useForm({
+    shouldUseNativeValidation: true,
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      message: "",
+    },
+  });
+
+  const onSubmit = (data) => {
+    const params = {
+      name: data.firstname,
+      email: data.email,
+      message: data.message,
+      firstname: data.firstname,
+      lastname: data.lastname,
+    };
+    fetch("/api/send-email", {
+      method: "POST",
+      body: JSON.stringify(params),
+    }).then((res) => console.log(res));
+  };
+
+  const variants = {
+    hidden: { opacity: 0, scale: 0.5 },
+    show: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
+  const Item = {
+    hidden: {
+      opacity: 0,
+      scale: 0.5,
+    },
+    show: {
+      opacity: 1,
+      scale: 1,
+    },
+  };
+
   return (
     <div className="flex flex-col gap-5">
       {/* hero section */}
-      <div className={`h-[calc(100vh-4rem)] grid grid-cols-3 mx-7 gap-6 pt-3`}>
+      <motion.div
+        className={`h-[calc(100vh-4rem)] grid grid-cols-3 mx-7 gap-6 pt-3`}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1, transition: { duration: 0.5 } }}
+      >
         {/* grid col 1*/}
         <div className="flex flex-col justify-between mt-20">
           <div className="flex flex-col gap-5">
@@ -181,10 +245,15 @@ export default function Home() {
             </TooltipProvider>
           </div>
         </div>
-      </div>
+      </motion.div>
       <div className="w-full h-[3px] bg-secondary-foreground opacity-[2%] my-5" />
       {/* services section */}
-      <div className="flex flex-col gap-7 mx-7">
+      <motion.section
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1, transition: { duration: 0.5 } }}
+        id="Services"
+        className="flex flex-col gap-7 mx-7"
+      >
         {/* header */}
         <div className="flex flex-col gap-2">
           <div className="flex gap-2 items-center">
@@ -202,13 +271,20 @@ export default function Home() {
             <Spinner />
           </div>
         ) : (
-          <div className="grid grid-cols-4 gap-4 h-[25rem]">
+          <motion.div
+            variants={variants}
+            initial="hidden"
+            whileInView="show"
+            className="grid grid-cols-4 gap-4 h-[25rem]"
+            key={services.length}
+          >
             {services.map((serve, index) => (
-              <div
+              <motion.div
                 key={serve.id}
-                className={`h-[90%] flex flex-col justify-between bg-card rounded-xl py-7 shadow-xl transition-all hover:scale-[103%] ${
+                className={`h-[90%] flex flex-col justify-between bg-card rounded-xl py-7 transition-all hover:scale-[103%] ${
                   index % 2 === 0 ? `self-start` : "self-end"
                 }`}
+                variants={Item}
               >
                 <div className="flex flex-col gap-3 px-3">
                   <div className="font-semibold text-lg text-primary">
@@ -226,13 +302,18 @@ export default function Home() {
                     sizes=""
                   />
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         )}
-      </div>
+      </motion.section>
       {/* team section */}
-      <div className="h-[calc(100vh-7rem)] bg-primary/20 mt-5 flex flex-col gap-5 py-5 pl-7">
+      <motion.section
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1, transition: { duration: 0.5 } }}
+        id="Team"
+        className="h-[calc(100vh-7rem)] bg-primary/20 mt-5 flex flex-col gap-5 py-5 pl-7"
+      >
         <div className="flex gap-2 items-center">
           <div className="text-xl font-bold capitalize">
             meet our passionate team
@@ -249,9 +330,13 @@ export default function Home() {
             <EmblaCarousel Team={team} />
           )}
         </div>
-      </div>
+      </motion.section>
       {/* footer section */}
-      <div className="h-[28rem] grid grid-cols-4 gap-3 my-5 mx-16">
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1, transition: { duration: 0.5 } }}
+        className="h-[28rem] grid grid-cols-4 gap-3 my-5 mx-16"
+      >
         <div className="h-5/6 w-full bg-white rounded-2xl overflow-hidden self-end shadow-lg">
           <Image
             src={foot_1}
@@ -282,7 +367,113 @@ export default function Home() {
             alt="footer dog picture 2"
           />
         </div>
-      </div>
+      </motion.div>
+      {/** contact us section */}
+      <motion.section
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1, transition: { duration: 0.5 } }}
+        id="Contact"
+        className="h-96 bg-primary/20 mt-5 py-10 px-32 grid grid-cols-2"
+      >
+        <div className="col-span-1 flex flex-col justify-between">
+          <div className="flex flex-col gap-1">
+            <div className="font-bold">Call us</div>
+            <div className="text-sm text-muted-foreground">
+              Call our team Mon-Fri from 8am to 6pm.
+            </div>
+            <div className="flex gap-2 items-center mt-1">
+              <BiPhoneCall size={20} />
+              <span className="text-sm font-semibold">+212 663-486277</span>
+            </div>
+          </div>
+          <div className="flex flex-col gap-1">
+            <div className="font-bold">Check our work</div>
+            <div className="text-sm text-muted-foreground">
+              Check our work & chat with our friendly team.
+            </div>
+            <div className="flex gap-2 items-center mt-1">
+              <Link href="https://www.linkedin.com/in/ahmad-ouladaouid/">
+                <BiLogoLinkedin size={26} />
+              </Link>
+              <Link href="https://github.com/ahmadoa">
+                <BiLogoGithub size={26} />
+              </Link>
+              <Link href="https://www.instagram.com/ahmad_oulada">
+                <BiLogoInstagram size={26} />
+              </Link>
+              <Link href="https://mail.google.com/mail/?view=cm&source=mailto&to=ouladaouida@gmail.com">
+                <BiLogoGmail size={26} />
+              </Link>
+            </div>
+          </div>
+          <div className="flex flex-col gap-1">
+            <div className="font-bold">Visit us</div>
+            <div className="text-sm text-muted-foreground">
+              Chat to us in person at our HQ.
+            </div>
+            <div className="flex gap-2 items-center mt-1">
+              <BiSolidMap size={24} />
+              <span className="text-sm font-semibold">
+                106 Medina, Tangier Morocco 90000
+              </span>
+            </div>
+          </div>
+        </div>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="col-span-1 w-full h-full   grid grid-cols-2 grid-rows-4 gap-4"
+        >
+          <div className="row-span-1 col-span-2  h-full grid grid-cols-2 gap-7">
+            <div className="col-span-1 flex flex-col gap-1">
+              <label htmlFor="firstname" className="font-semibold text-sm">
+                Firstname
+              </label>
+              <input
+                name="firstname"
+                placeholder="First name"
+                className="w-full h-full pl-2 outline outline-1 outline-muted-foreground rounded-xl bg-transparent placeholder:text-muted-foreground"
+                {...register("firstname", { required: true })}
+              />
+            </div>
+            <div className="col-span-1 flex flex-col gap-1">
+              <label htmlFor="lastname" className="font-semibold text-sm">
+                Lastname
+              </label>
+              <input
+                name="lastname"
+                placeholder="Last name"
+                className="w-full h-full pl-2 outline outline-1 outline-muted-foreground rounded-xl bg-transparent placeholder:text-muted-foreground"
+                {...register("lastname", { required: true })}
+              />
+            </div>
+          </div>
+          <div className="row-span-1 col-span-2 h-full flex flex-col gap-1">
+            <label htmlFor="email" className="font-semibold text-sm">
+              Email
+            </label>
+            <input
+              name="email"
+              placeholder="username@domain.com"
+              className="w-full h-full pl-2 outline outline-1 outline-muted-foreground rounded-xl bg-transparent placeholder:text-muted-foreground"
+              {...register("email", { required: true })}
+            />
+          </div>
+          <div className="row-span-1 col-span-2 h-full flex flex-col gap-1">
+            <label htmlFor="message" className="font-semibold text-sm">
+              Message
+            </label>
+            <input
+              name="message"
+              placeholder="Leave us a message..."
+              className="w-full h-full pl-2 outline outline-1 outline-muted-foreground rounded-xl bg-transparent placeholder:text-muted-foreground"
+              {...register("message", { required: true })}
+            />
+          </div>
+          <div className="row-span-1 col-span-2 flex items-end justify-end">
+            <Button>Send message</Button>
+          </div>
+        </form>
+      </motion.section>
     </div>
   );
 }

@@ -43,6 +43,36 @@ export async function POST(req) {
         doc(db, "users", data.userId, "Archives", data.orderId),
         data
       );
+      const MsgsDocs = await getDocs(
+        collection(db, "users", data.userId, "Orders", data.orderId, "Messages")
+      );
+      MsgsDocs.forEach(async (docu) => {
+        await setDoc(
+          doc(
+            db,
+            "users",
+            data.userId,
+            "Archives",
+            data.orderId,
+            "Messages",
+            docu.id
+          ),
+          docu.data()
+        );
+      });
+      MsgsDocs.forEach(async (docu) => {
+        await deleteDoc(
+          doc(
+            db,
+            "users",
+            data.userId,
+            "Orders",
+            data.orderId,
+            "Messages",
+            docu.id
+          )
+        );
+      });
       await deleteDoc(doc(db, "users", data.userId, "Orders", data.orderId));
     }
     return NextResponse.json({ message: "Archived successfully" });

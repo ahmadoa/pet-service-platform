@@ -4,6 +4,22 @@ import { Button } from "./ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import ChatComponent from "./ChatComponent";
+import { motion } from "framer-motion";
+import Select from "./ui/Select_Animation";
+import Stripe from "stripe";
+import { deleteDoc, doc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "./ui/alert-dialog";
 
 export default function OrderDetails({ orderId, userId }) {
   const [appointment, setAppointment] = useState({});
@@ -11,6 +27,7 @@ export default function OrderDetails({ orderId, userId }) {
   const quantity = appointment.Duration ? Number(appointment.Duration) : 1;
   const date = new Date(appointment.Date);
   const { toast } = useToast();
+  const [defTab, setDefTab] = useState("details");
 
   const RetrieveAppointment = () => {
     fetch(`/api/order?userId=${userId}&orderId=${orderId}`, {
@@ -73,10 +90,53 @@ export default function OrderDetails({ orderId, userId }) {
     }
   };
 
+  useEffect(() => {
+    setDefTab("details");
+  }, [appointment]);
+
+  const cancelAppointment = async () => {
+    const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY);
+
+    const refund = await stripe.refunds.create({
+      payment_intent: orderId,
+    });
+
+    if (refund.status === "succeeded") {
+      console.log("Refund succeeded!");
+      await deleteDoc(doc(db, "users", userId, "Orders", orderId));
+      await deleteDoc(doc(db, "Orders", orderId));
+      toast({
+        className: cn(
+          "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4"
+        ),
+        title: "Appointment Canceled Successfully!",
+        description: "You've Canceled & refunded an appointment successfully",
+      });
+    } else {
+      toast({
+        className: cn(
+          "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4"
+        ),
+        title: "Failed To Cancel Appointment!",
+        description: "Appointment cancelation failed",
+      });
+    }
+  };
+
   return (
-    <div className="w-full h-full px-5">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.7 }}
+      className="w-full h-full px-5"
+    >
       {Object.keys(appointment).length > 0 && appointment ? (
-        <Tabs defaultValue="details" className="h-full w-full">
+        <Tabs
+          defaultValue={defTab}
+          value={defTab}
+          onValueChange={(value) => setDefTab(value)}
+          className="h-full w-full"
+        >
           <div className="h-12 bg-card rounded-xl w-fit p-1 shadow-sm">
             <TabsList className="h-full w-fit flex gap-3 px-1 bg-transparent">
               <TabsTrigger value="details" className="h-full w-fit">
@@ -87,7 +147,10 @@ export default function OrderDetails({ orderId, userId }) {
               </TabsTrigger>
             </TabsList>
           </div>
-          <TabsContent value="details" className="h-full bg-card rounded-xl">
+          <TabsContent
+            value="details"
+            className="h-full bg-card rounded-xl overflow-y-scroll"
+          >
             <div className="h-full grid grid-cols-2">
               {/** details section */}
               <div className="h-full flex flex-col gap-3 p-5">
@@ -174,9 +237,30 @@ export default function OrderDetails({ orderId, userId }) {
                   >
                     Archive appointment
                   </Button>
-                  <Button disabled={disableCancel} className="">
-                    Cancel Appointment
-                  </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button disabled={disableCancel} className="">
+                        Cancel Appointment
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Appointment Cancelation & refund
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          If you are sure of cancelling and receiving a refund
+                          of this appintment, please proceed.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={cancelAppointment}>
+                          Continue
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </div>
               </div>
             </div>
@@ -185,12 +269,14 @@ export default function OrderDetails({ orderId, userId }) {
             <ChatComponent
               userId={appointment.userId}
               orderId={appointment.orderId}
+              AppointDate={appointment.Date}
+              status={appointment.Status}
             />
           </TabsContent>
         </Tabs>
       ) : (
         <></>
       )}
-    </div>
+    </motion.div>
   );
 }

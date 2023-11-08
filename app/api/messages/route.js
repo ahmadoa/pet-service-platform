@@ -27,6 +27,17 @@ export async function POST(req) {
       createdAt: serverTimestamp(),
     });
 
+    // add to admin notifs
+    await addDoc(collection(db, "Notifications"), {
+      type: "message",
+      userId: data.userId,
+      username: data.sender_name,
+      userpicture: data.profile,
+      text: data.text,
+      createdAt: serverTimestamp(),
+      href: data.href,
+    });
+
     return NextResponse.json({ message: "message sent successfully" });
   } catch (error) {
     console.log("Error sending message:", error);

@@ -1,5 +1,12 @@
 import { db } from "@/lib/firebase";
-import { collection, doc, getDocs, setDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDocs,
+  serverTimestamp,
+  setDoc,
+} from "firebase/firestore";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
@@ -16,6 +23,18 @@ export async function POST(req) {
     const docRef = doc(db, "Orders", data.orderId);
 
     await setDoc(docRef, data);
+
+    // add to admin notifs
+    await addDoc(collection(db, "Notifications"), {
+      type: "order",
+      userId: data.userId,
+      username: data.username,
+      userpicture: data.profile,
+      createdAt: serverTimestamp(),
+      href: data.href,
+    });
+
+    
 
     return NextResponse.json({ message: "Order added successfully" });
   } catch (error) {

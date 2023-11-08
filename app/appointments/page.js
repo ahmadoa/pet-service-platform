@@ -7,6 +7,12 @@ import { FaDog } from "react-icons/fa";
 import { GiDogHouse, GiJumpingDog } from "react-icons/gi";
 import OrderDetails from "@/components/OrderDetails";
 import { useRouter, useSearchParams } from "next/navigation";
+import NoData from "@/components/ui/no-data";
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+import Select from "@/components/ui/Select_Animation";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 
 const Icons = {
   Grooming: HiScissors,
@@ -53,19 +59,68 @@ function Appointment() {
     }
   };
 
+  useEffect(() => {
+    const id = params.get("id");
+    setSelectedAppointment(id || "");
+  }, [params]);
+
+  const variants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.3,
+      },
+    },
+  };
+
+  const Item = {
+    hidden: {
+      opacity: 0,
+    },
+    show: {
+      opacity: 1,
+    },
+  };
+
+  // check user
+  const checkUserStatus = () => {
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        router.push("/");
+      }
+    });
+  };
+
+  useEffect(() => {
+    checkUserStatus();
+  }, []);
+
   return (
     <div className="w-full h-full grid grid-cols-12 gap-1">
-      {appointments ? (
+      {appointments.length > 0 ? (
         <>
-          <div className="h-full col-span-3">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="h-full col-span-3"
+          >
             <div className="h-full flex flex-col gap-3">
               <div className="w-full h-12 flex items-center text-lg bg-card rounded-xl font-bold p-5 shadow-sm">
                 All Appointments
               </div>
-              <div className="h-full flex flex-col gap-3 overflow-scroll">
+              <motion.div
+                variants={variants}
+                initial="hidden"
+                animate="show"
+                className="h-full flex flex-col gap-3 overflow-scroll"
+                key={appointments.length}
+              >
                 {appointments.map((appointment) => (
                   <div
                     key={appointment.orderId}
+                    variants={Item}
                     className={`w-full h-[4.5rem] flex gap-2 ${
                       selectedAppointment === appointment.orderId
                         ? "bg-muted"
@@ -76,7 +131,6 @@ function Appointment() {
                         shallow: true,
                       });
                       setSelectedAppointment(appointment.orderId);
-                      setCurrUser(appointment.userId);
                     }}
                   >
                     <div
@@ -124,19 +178,67 @@ function Appointment() {
                     </div>
                   </div>
                 ))}
-              </div>
+              </motion.div>
             </div>
-          </div>
+          </motion.div>
           <div className="h-full col-span-9 pb-14">
             {selectedAppointment.length > 0 && currUser.length > 0 ? (
               <OrderDetails orderId={selectedAppointment} userId={currUser} />
             ) : (
-              <></>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5 }}
+                className="h-full rounded-xl flex flex-col items-center justify-center text-center"
+              >
+                <div className="bg-card p-4 rounded-xl shadow-sm flex flex-col items-center justify-center text-center gap-2">
+                  <Select />
+                  <div className="font-semibold">No Appointment Selected</div>
+                  <p className="w-5/6 text-sm text-muted-foreground">
+                    Please select an appointment from the list to view its
+                    details
+                  </p>
+                </div>
+              </motion.div>
             )}
           </div>
         </>
       ) : (
-        <></>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="w-full h-full col-span-12 flex flex-col items-center justify-center"
+        >
+          <NoData />
+          <div className="flex flex-col gap-3 items-center justify-center">
+            <div className="text-lg font-bold text-center">
+              No Appointments Found
+            </div>
+            <p className="w-5/6 text-sm text-muted-foreground text-center">
+              You haven't placed any appointments yet. Click the button below to
+              book a new appointment.
+            </p>
+            <div className="flex items-center gap-5">
+              <Button
+                className="font-semibold"
+                onClick={() => {
+                  router.push("/book-appointment");
+                }}
+              >
+                Book a new appointment
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  router.push("/");
+                }}
+              >
+                Go To Homepage
+              </Button>
+            </div>
+          </div>
+        </motion.div>
       )}
     </div>
   );

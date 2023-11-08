@@ -6,10 +6,14 @@ import Logo from "@/public/logo.svg";
 import Image from "next/image";
 import ScheduleStep from "@/components/ScheduleStep";
 import AppointmentDetails from "@/components/AppointmentDetailsStep";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/lib/firebase";
+import { useRouter } from "next/navigation";
 
 export default function Appointement() {
   const [activeTab, setActiveTab] = useState(0);
   const [services, setServices] = useState([]);
+  const router = useRouter();
 
   const getServices = () => {
     fetch("/api/services", {
@@ -51,6 +55,20 @@ export default function Appointement() {
       onStepBack={handlePreviousNext}
     />,
   ];
+
+  // check user
+  const checkUserStatus = () => {
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        router.push("/");
+      }
+    });
+  };
+
+  useEffect(() => {
+    checkUserStatus();
+  }, []);
+
   return (
     <div className="h-under-nav w-full pt-16 pb-10 px-7 relative overflow-hidden">
       <Image

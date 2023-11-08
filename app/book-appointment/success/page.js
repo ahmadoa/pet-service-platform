@@ -10,6 +10,8 @@ import Image from "next/image";
 import SuccessAnim from "@/components/ui/successAnim";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 
 function Success() {
   const { user } = UserAuth();
@@ -35,6 +37,9 @@ function Success() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             userId: user.uid,
+            profile: user.photoURL,
+            username: user.displayName,
+            href: `/dashboard/appointments?id=${res.payment_intent}`,
             orderId: res.payment_intent,
             priceId: cookies.PriceID,
             name: cookies.Name,
@@ -79,6 +84,19 @@ function Success() {
       getSession(session, cookies.Name);
     }
   }, [loaded, user]);
+
+  // check user
+  const checkUserStatus = () => {
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        router.push("/");
+      }
+    });
+  };
+
+  useEffect(() => {
+    checkUserStatus();
+  }, []);
 
   return (
     <div className="h-under-nav w-full relative overflow-hidden flex flex-col items-center justify-center text-center gap-5">

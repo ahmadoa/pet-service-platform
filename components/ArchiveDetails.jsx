@@ -1,10 +1,12 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState, useEffect } from "react";
+import ArchiveChatComponent from "./ArchiveChatComponent";
 
 export default function ArchiveDetails({ orderId, userId }) {
   const [archive, setArchive] = useState({});
   const quantity = archive.Duration ? Number(archive.Duration) : 1;
   const date = new Date(archive.Date);
+  const [defTab, setDefTab] = useState("details");
 
   const RetrieveArchive = () => {
     fetch(`/api/archive?orderId=${orderId}&userId=${userId}`, {
@@ -22,10 +24,19 @@ export default function ArchiveDetails({ orderId, userId }) {
     }
   }, [orderId, userId]);
 
+  useEffect(() => {
+    setDefTab("details");
+  }, [archive]);
+
   return (
     <div className="w-full h-full px-5">
       {Object.keys(archive).length > 0 && archive ? (
-        <Tabs defaultValue="details" className="h-full w-full">
+        <Tabs
+          defaultValue={defTab}
+          value={defTab}
+          onValueChange={(value) => setDefTab(value)}
+          className="h-full w-full"
+        >
           <div className="h-12 bg-card rounded-xl w-fit p-1 shadow-sm">
             <TabsList className="h-full w-fit flex gap-3 px-1 bg-transparent">
               <TabsTrigger value="details" className="h-full w-fit">
@@ -112,11 +123,13 @@ export default function ArchiveDetails({ orderId, userId }) {
               </div>
             </div>
           </TabsContent>
-          <TabsContent
-            value="messages"
-            className="h-full bg-card rounded-xl p-5"
-          >
-            <div className="w-full h-full bg-chat bg-no-repeat bg-cover rounded-2xl"></div>
+          <TabsContent value="messages" className="h-full bg-card rounded-xl">
+            <ArchiveChatComponent
+              userId={archive.userId}
+              orderId={archive.orderId}
+              AppointDate={archive.Date}
+              status={archive.Status}
+            />
           </TabsContent>
         </Tabs>
       ) : (

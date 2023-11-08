@@ -9,6 +9,9 @@ import ArchiveDetails from "@/components/ArchiveDetails";
 import { useRouter, useSearchParams } from "next/navigation";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase";
+import Select from "@/components/ui/Select_Animation";
+import { motion } from "framer-motion";
+import NoData from "@/components/ui/no-data";
 
 const Icons = {
   Grooming: HiScissors,
@@ -19,7 +22,7 @@ const Icons = {
 
 export default function Archives() {
   const [archives, setArchives] = useState([]);
-
+  const { user } = UserAuth();
   const params = useSearchParams();
 
   const [selectedArchive, setSelectedArchive] = useState(
@@ -28,20 +31,6 @@ export default function Archives() {
   const [currUser, setCurrUser] = useState("");
 
   const router = useRouter();
-
-  const [user, setUser] = useState({});
-  const [loading, setLoading] = useState(true);
-
-  const checkUserStatus = () => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setLoading(false);
-        setUser(user);
-      } else {
-        router.push("/login");
-      }
-    });
-  };
 
   const RetrieveArchives = () => {
     fetch(`/api/archives?userId=${user.uid}`, {
@@ -55,11 +44,11 @@ export default function Archives() {
   };
 
   useEffect(() => {
-    checkUserStatus();
-    if (loading === false) {
+    if (user) {
       RetrieveArchives();
+      setCurrUser(user.uid);
     }
-  }, [loading]);
+  }, [user]);
 
   const ServiceIcon = ({ serviceType }) => {
     if (serviceType in Icons) {
@@ -70,19 +59,68 @@ export default function Archives() {
     }
   };
 
+  useEffect(() => {
+    const id = params.get("id");
+    setSelectedArchive(id || "");
+  }, [params]);
+
+  const variants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.3,
+      },
+    },
+  };
+
+  const Item = {
+    hidden: {
+      opacity: 0,
+    },
+    show: {
+      opacity: 1,
+    },
+  };
+
+  // check user
+  const checkUserStatus = () => {
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        router.push("/");
+      }
+    });
+  };
+
+  useEffect(() => {
+    checkUserStatus();
+  }, []);
+
   return (
     <div className="w-full h-full grid grid-cols-12 gap-1">
       {archives ? (
         <>
-          <div className="h-full col-span-3">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="h-full col-span-3"
+          >
             <div className="h-full flex flex-col gap-3">
               <div className="w-full h-12 flex items-center text-secondary-foreground text-lg bg-card rounded-xl font-bold p-5 shadow-sm">
                 All Archived Appointments
               </div>
-              <div className="h-full flex flex-col gap-3 overflow-scroll">
+              <motion.div
+                variants={variants}
+                initial="hidden"
+                animate="show"
+                key={archives.length}
+                className="h-full flex flex-col gap-3 overflow-scroll"
+              >
                 {archives.map((archive) => (
-                  <div
+                  <motion.div
                     key={archive.orderId}
+                    variants={Item}
                     className={`w-full h-[4.5rem] flex gap-2 ${
                       selectedArchive === archive.orderId
                         ? "bg-muted"
@@ -93,7 +131,6 @@ export default function Archives() {
                         shallow: true,
                       });
                       setSelectedArchive(archive.orderId);
-                      setCurrUser(archive.userId);
                     }}
                   >
                     <div
@@ -137,21 +174,69 @@ export default function Archives() {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
-              </div>
+              </motion.div>
             </div>
-          </div>
+          </motion.div>
           <div className="h-full col-span-9 pb-14">
             {selectedArchive.length > 0 && currUser.length > 0 ? (
-              <ArchiveDetails orderId={selectedArchive} userId={currUser} />
+              <ArchiveDetails orderId={selectedArchive} userId={user.uid} />
             ) : (
-              <></>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5 }}
+                className="h-full rounded-xl flex flex-col items-center justify-center text-center"
+              >
+                <div className="bg-card p-4 rounded-xl shadow-sm flex flex-col items-center justify-center text-center gap-2">
+                  <Select />
+                  <div className="font-semibold">No Appointment Selected</div>
+                  <p className="w-5/6 text-sm text-muted-foreground">
+                    Please select an archived appointment from the list to view
+                    its details
+                  </p>
+                </div>
+              </motion.div>
             )}
           </div>
         </>
       ) : (
-        <></>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="w-full h-full col-span-12 flex flex-col items-center justify-center"
+        >
+          <NoData />
+          <div className="flex flex-col gap-3 items-center justify-center">
+            <div className="text-lg font-bold text-center">
+              No Archives Found
+            </div>
+            <p className="w-5/6 text-sm text-muted-foreground text-center">
+              You haven't archived any appointments yet. Click the button below
+              to track your appointment.
+            </p>
+            <div className="flex items-center gap-5">
+              <Button
+                className="font-semibold"
+                onClick={() => {
+                  router.push("/appointments");
+                }}
+              >
+                Track your appointments
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  router.push("/book-appointment");
+                }}
+              >
+                Book a new appointment
+              </Button>
+            </div>
+          </div>
+        </motion.div>
       )}
     </div>
   );
