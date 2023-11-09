@@ -31,8 +31,13 @@ export default function OrderDetails({ orderId, userId }) {
 
   // get appointment details from db
   const RetrieveAppointment = () => {
-    fetch(`/api/order?userId=${userId}&orderId=${orderId}`, {
-      method: "GET",
+    fetch(`/api/order`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userId: userId,
+        orderId: orderId,
+      }),
     })
       .then((response) => response.json())
       .then((data) => {

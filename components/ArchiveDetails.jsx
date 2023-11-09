@@ -10,8 +10,15 @@ export default function ArchiveDetails({ orderId, userId }) {
 
   // get archive details from db
   const RetrieveArchive = () => {
-    fetch(`/api/archive?orderId=${orderId}&userId=${userId}`, {
-      method: "GET",
+    fetch(`/api/archive`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        orderId: orderId,
+        userId: userId,
+      }),
     })
       .then((response) => response.json())
       .then((data) => {

@@ -40,25 +40,3 @@ export async function POST(req) {
     return NextResponse.json({ error: "Failed to add the order" }, 500);
   }
 }
-
-export async function GET(req) {
-  try {
-    const { searchParams } = new URL(req.url);
-    const user_id = searchParams.get("userId");
-
-    const querySnapshot = await getDocs(
-      collection(db, "users", user_id, "Orders")
-    );
-
-    const docs = [];
-    querySnapshot.forEach((doc) => {
-      docs.push(doc.data());
-    });
-
-    console.log(docs);
-
-    return NextResponse.json(docs);
-  } catch (error) {
-    return NextResponse.json({ error: "Failed to retrieve appointments" }, 500);
-  }
-}

@@ -35,8 +35,12 @@ export default function Archives() {
 
   // get archives from db
   const RetrieveArchives = () => {
-    fetch(`/api/archives?userId=${user.uid}`, {
-      method: "GET",
+    fetch(`/api/get_archives`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId: user.uid }),
     })
       .then((response) => response.json())
       .then((data) => {

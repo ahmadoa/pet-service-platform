@@ -34,8 +34,12 @@ function Appointment() {
 
   // get appointments from db
   const RetrieveAppointments = () => {
-    fetch(`/api/orders?userId=${user.uid}`, {
-      method: "GET",
+    fetch(`/api/get_orders`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId: user.uid }),
     })
       .then((response) => response.json())
       .then((data) => {
