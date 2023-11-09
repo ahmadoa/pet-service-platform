@@ -32,7 +32,7 @@ function Appointment() {
   const [currUser, setCurrUser] = useState("");
   const [appointments, setAppointments] = useState([]);
 
-  /*const RetrieveAppointments = () => {
+  const RetrieveAppointments = () => {
     fetch(`/api/orders?userId=${user.uid}`, {
       method: "GET",
     })
@@ -41,7 +41,7 @@ function Appointment() {
         setAppointments(data);
         console.log(data);
       });
-  };*/
+  };
 
   useEffect(() => {
     if (user) {
@@ -125,7 +125,7 @@ function Appointment() {
                       selectedAppointment === appointment.orderId
                         ? "bg-muted"
                         : "bg-card"
-                    } bg-card hover:bg-muted transition-all rounded-xl font-semibold p-2 shadow-sm relative cursor-pointer`}
+                    } bg-card hover:bg-muted transition-colors rounded-xl font-semibold p-2 shadow-sm relative cursor-pointer`}
                     onClick={() => {
                       router.push(`/appointments?id=${appointment.orderId}`, {
                         shallow: true,

@@ -34,8 +34,6 @@ export async function POST(req) {
       href: data.href,
     });
 
-    
-
     return NextResponse.json({ message: "Order added successfully" });
   } catch (error) {
     console.log("Error adding order:", error);
@@ -54,7 +52,6 @@ export async function GET(req) {
 
     const docs = [];
     querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
       docs.push(doc.data());
     });
 

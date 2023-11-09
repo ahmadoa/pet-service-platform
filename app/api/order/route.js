@@ -11,11 +11,13 @@ export async function GET(req) {
     const docSnap = await getDoc(doc(db, "users", user_id, "Orders", order_id));
 
     if (docSnap.exists()) {
-      return NextResponse.json(docSnap.data());
+      return new Response(JSON.stringify(docSnap.data()));
     } else {
-      return NextResponse.json({});
+      return new Response(JSON.stringify({}));
     }
   } catch (error) {
-    return NextResponse.json({ error: "Failed to retrieve appointment" }, 500);
+    return new Response(
+      JSON.stringify({ error: "Failed to retrieve appointment" })
+    );
   }
 }

@@ -9,6 +9,8 @@ export const EmblaCarousel = ({ Team }) => {
     [WheelGesturesPlugin()]
   );
 
+  console.log(Team);
+
   return (
     <div className="w-fit overflow-hidden" ref={emblaRef}>
       <div className="h-full w-full flex gap-5 touch-pan-y cursor-pointer">

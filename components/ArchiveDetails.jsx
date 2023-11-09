@@ -8,7 +8,7 @@ export default function ArchiveDetails({ orderId, userId }) {
   const date = new Date(archive.Date);
   const [defTab, setDefTab] = useState("details");
 
-  /*const RetrieveArchive = () => {
+  const RetrieveArchive = () => {
     fetch(`/api/archive?orderId=${orderId}&userId=${userId}`, {
       method: "GET",
     })
@@ -16,7 +16,7 @@ export default function ArchiveDetails({ orderId, userId }) {
       .then((data) => {
         setArchive(data);
       });
-  };*/
+  };
 
   useEffect(() => {
     if (orderId && userId) {

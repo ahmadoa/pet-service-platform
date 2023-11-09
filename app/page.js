@@ -49,7 +49,7 @@ export default function Home() {
     }
   };
 
-  /*const getServices = () => {
+  const getServices = () => {
     fetch("/api/services", {
       method: "GET",
     })
@@ -59,9 +59,9 @@ export default function Home() {
       .then((data) => {
         setServices(data.productPriceData.data);
       });
-  };*/
+  };
 
-  /*const getTeam = () => {
+  const getTeam = () => {
     fetch("/api/team", {
       method: "GET",
     })
@@ -71,7 +71,7 @@ export default function Home() {
       .then((data) => {
         setTeam(data);
       });
-  };*/
+  };
 
   useEffect(() => {
     getServices();
@@ -93,7 +93,7 @@ export default function Home() {
     },
   });
 
-  /*const onSubmit = (data) => {
+  const onSubmit = (data) => {
     const params = {
       name: data.firstname,
       email: data.email,
@@ -116,7 +116,7 @@ export default function Home() {
         });
       }
     });
-  };*/
+  };
 
   const variants = {
     hidden: { opacity: 0, scale: 0.5 },
@@ -318,12 +318,11 @@ export default function Home() {
             initial="hidden"
             whileInView="show"
             className="grid grid-cols-4 gap-4 h-[25rem]"
-            key={services.length}
           >
             {services.map((serve, index) => (
               <motion.div
                 key={serve.id}
-                className={`h-[90%] flex flex-col justify-between bg-card rounded-xl py-7 transition-all hover:scale-[103%] ${
+                className={`h-[90%] flex flex-col justify-between bg-card rounded-xl py-7 shadow-sm will-change-transform ${
                   index % 2 === 0 ? `self-start` : "self-end"
                 }`}
                 variants={Item}

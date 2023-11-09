@@ -14,11 +14,13 @@ export async function GET(req) {
 
     if (docSnap.exists()) {
       console.log(docSnap.data());
-      return NextResponse.json(docSnap.data());
+      return new Response(JSON.stringify(docSnap.data()));
     } else {
-      return NextResponse.json({});
+      return new Response(JSON.stringify({}));
     }
   } catch (error) {
-    return NextResponse.json({ error: "Failed to retrieve appointment" }, 500);
+    return new Response(
+      JSON.stringify({ error: "Failed to retrieve appointment" })
+    );
   }
 }

@@ -33,7 +33,7 @@ export default function Archives() {
 
   const router = useRouter();
 
-  /*const RetrieveArchives = () => {
+  const RetrieveArchives = () => {
     fetch(`/api/archives?userId=${user.uid}`, {
       method: "GET",
     })
@@ -42,7 +42,7 @@ export default function Archives() {
         setArchives(data);
         console.log(data);
       });
-  };*/
+  };
 
   useEffect(() => {
     if (user) {
@@ -126,7 +126,7 @@ export default function Archives() {
                       selectedArchive === archive.orderId
                         ? "bg-muted"
                         : "bg-card"
-                    } bg-card hover:bg-muted transition-all rounded-xl font-semibold p-2 shadow-sm relative cursor-pointer`}
+                    } bg-card hover:bg-muted transition-colors rounded-xl font-semibold p-2 shadow-sm relative cursor-pointer`}
                     onClick={() => {
                       router.push(`/archives?id=${archive.orderId}`, {
                         shallow: true,

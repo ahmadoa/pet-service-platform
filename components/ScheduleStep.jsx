@@ -33,7 +33,7 @@ const ScheduleStep = ({ onStepNext, onStepBack }) => {
   const [appointments, setAppointments] = useState([]);
 
   // function that fetches the appointments collection
-  /*const getAppointments = () => {
+  const getAppointments = () => {
     fetch("/api/all_orders", {
       method: "GET",
     })
@@ -43,7 +43,7 @@ const ScheduleStep = ({ onStepNext, onStepBack }) => {
       .then((data) => {
         setAppointments(data);
       });
-  };*/
+  };
 
   useEffect(() => {
     getAppointments();

@@ -39,7 +39,7 @@ function ChatComponent({ userId, orderId, AppointDate, status }) {
   }, [messages]);
 
   // post message to order id / user
-  /*const PostMessage = async () => {
+  const PostMessage = async () => {
     if (message.length != 0) {
       const response = await fetch("/api/messages", {
         method: "POST",
@@ -63,7 +63,7 @@ function ChatComponent({ userId, orderId, AppointDate, status }) {
     } else {
       console.log("fill message input");
     }
-  };*/
+  };
 
   // listening to messages
   useEffect(() => {
@@ -81,6 +81,12 @@ function ChatComponent({ userId, orderId, AppointDate, status }) {
       setMessages(messagesDocs);
     });
   }, []);
+
+  const today = new Date();
+  const appointDate = new Date(AppointDate);
+  const diffTime = today - appointDate;
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  console.log("Days until appointment:", diffDays);
 
   return (
     <div className="w-full h-full bg-chat bg-no-repeat bg-cover rounded-xl p-5 gap-2 relative">
@@ -145,13 +151,11 @@ function ChatComponent({ userId, orderId, AppointDate, status }) {
               className="h-full flex-1 text-primary-foreground bg-transparent focus:outline-none first-letter:uppercase"
               value={message}
               disabled={
-                (status === "On Process" &&
-                  moment(AppointDate).isBefore(moment())) ||
+                (status === "On Process" && diffDays < 0) ||
                 status === "Fulfilled"
               }
               placeholder={
-                status === "On Process" &&
-                moment(AppointDate).isBefore(moment())
+                status === "On Process" && diffDays < 0
                   ? "You can't send message before the appointment date"
                   : status === "Fulfilled"
                   ? "You can't send message after appointment is fulfilled"

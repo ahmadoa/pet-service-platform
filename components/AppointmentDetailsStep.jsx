@@ -22,7 +22,7 @@ function AppointmentDetails({ onStepBack }) {
   const [price, setPrice] = useState(0);
   const [services, setServices] = useState([]);
 
-  /*const getServices = () => {
+  const getServices = () => {
     fetch("/api/services", {
       method: "GET",
     })
@@ -32,7 +32,7 @@ function AppointmentDetails({ onStepBack }) {
       .then((data) => {
         setServices(data.productPriceData.data);
       });
-  };*/
+  };
 
   useEffect(() => {
     getServices();
