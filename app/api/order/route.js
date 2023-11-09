@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(req) {
   try {
-    const { searchParams } = new URL(req.url);
+    const searchParams = req.nextUrl.searchParams;
     const user_id = searchParams.get("userId");
     const order_id = searchParams.get("orderId");
 
