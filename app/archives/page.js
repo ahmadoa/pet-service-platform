@@ -116,7 +116,7 @@ export default function Archives() {
                 initial="hidden"
                 animate="show"
                 key={archives.length}
-                className="h-full flex flex-col gap-3 overflow-scroll"
+                className="h-full flex flex-col gap-3 overflow-scroll disable-scrollbars"
               >
                 {archives.map((archive) => (
                   <motion.div

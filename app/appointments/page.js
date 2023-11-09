@@ -114,7 +114,7 @@ function Appointment() {
                 variants={variants}
                 initial="hidden"
                 animate="show"
-                className="h-full flex flex-col gap-3 overflow-scroll"
+                className="h-full flex flex-col gap-3 overflow-scroll disable-scrollbars"
                 key={appointments.length}
               >
                 {appointments.map((appointment) => (
