@@ -128,9 +128,7 @@ function Appointment() {
                         : "bg-card"
                     } bg-card hover:bg-muted transition-colors rounded-xl font-semibold p-2 shadow-sm relative cursor-pointer`}
                     onClick={() => {
-                      router.push(`/appointments?id=${appointment.orderId}`, {
-                        shallow: true,
-                      });
+                      router.push(`/appointments?id=${appointment.orderId}`);
                       setSelectedAppointment(appointment.orderId);
                     }}
                   >

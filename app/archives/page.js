@@ -129,9 +129,7 @@ export default function Archives() {
                         : "bg-card"
                     } bg-card hover:bg-muted transition-colors rounded-xl font-semibold p-2 shadow-sm relative cursor-pointer`}
                     onClick={() => {
-                      router.push(`/archives?id=${archive.orderId}`, {
-                        shallow: true,
-                      });
+                      router.push(`/archives?id=${archive.orderId}`);
                       setSelectedArchive(archive.orderId);
                     }}
                   >
