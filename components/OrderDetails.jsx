@@ -37,9 +37,7 @@ export default function OrderDetails({ orderId, userId }) {
       .then((response) => response.json())
       .then((data) => {
         setAppointment(data);
-      })
-      .then(() => {
-        console.log(appointment.Status);
+        console.log("appointment data:", data);
       });
   };
 

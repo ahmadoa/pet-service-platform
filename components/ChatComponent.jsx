@@ -79,12 +79,16 @@ function ChatComponent({ userId, orderId, AppointDate, status }) {
         messagesDocs.push(data);
       });
       setMessages(messagesDocs);
+      console.log("messages docs: ", messagesDocs);
     });
   }, []);
 
   const today = new Date();
+  console.log("today: ", today);
   const appointDate = new Date(AppointDate);
+  console.log("appointDate: ", appointDate);
   const diffTime = today - appointDate;
+  console.log("diffTime: ", diffTime);
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   console.log("Days until appointment:", diffDays);
 
