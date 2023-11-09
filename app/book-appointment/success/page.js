@@ -28,7 +28,7 @@ function Success() {
 
   const session = params.get("session_id");
 
-  const getSession = async (ses, cook) => {
+  /*const getSession = async (ses, cook) => {
     if (ses && cook) {
       const res = await stripe.checkout.sessions.retrieve(ses);
       if (res.payment_status === "paid") {
@@ -74,7 +74,7 @@ function Success() {
     } else {
       router.push("/");
     }
-  };
+  };*/
 
   useEffect(() => {
     if (user != null) {

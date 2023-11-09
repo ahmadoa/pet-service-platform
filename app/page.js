@@ -49,7 +49,7 @@ export default function Home() {
     }
   };
 
-  const getServices = () => {
+  /*const getServices = () => {
     fetch("/api/services", {
       method: "GET",
     })
@@ -59,9 +59,9 @@ export default function Home() {
       .then((data) => {
         setServices(data.productPriceData.data);
       });
-  };
+  };*/
 
-  const getTeam = () => {
+  /*const getTeam = () => {
     fetch("/api/team", {
       method: "GET",
     })
@@ -71,7 +71,7 @@ export default function Home() {
       .then((data) => {
         setTeam(data);
       });
-  };
+  };*/
 
   useEffect(() => {
     getServices();
@@ -93,7 +93,7 @@ export default function Home() {
     },
   });
 
-  const onSubmit = (data) => {
+  /*const onSubmit = (data) => {
     const params = {
       name: data.firstname,
       email: data.email,
@@ -116,7 +116,7 @@ export default function Home() {
         });
       }
     });
-  };
+  };*/
 
   const variants = {
     hidden: { opacity: 0, scale: 0.5 },

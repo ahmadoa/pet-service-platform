@@ -15,7 +15,7 @@ export default function Appointement() {
   const [services, setServices] = useState([]);
   const router = useRouter();
 
-  const getServices = () => {
+  /*const getServices = () => {
     fetch("/api/services", {
       method: "GET",
     })
@@ -25,7 +25,7 @@ export default function Appointement() {
       .then((data) => {
         setServices(data.productPriceData.data);
       });
-  };
+  };*/
 
   useEffect(() => {
     getServices();

@@ -33,7 +33,7 @@ export default function Archives() {
 
   const router = useRouter();
 
-  const RetrieveArchives = () => {
+  /*const RetrieveArchives = () => {
     fetch(`/api/archives?userId=${user.uid}`, {
       method: "GET",
     })
@@ -42,7 +42,7 @@ export default function Archives() {
         setArchives(data);
         console.log(data);
       });
-  };
+  };*/
 
   useEffect(() => {
     if (user) {

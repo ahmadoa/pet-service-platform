@@ -57,7 +57,7 @@ const ServiceStep = ({ onStepNext, onStepBack }) => {
 
   const [services, setServices] = useState([]);
 
-  const getServices = () => {
+  /*const getServices = () => {
     fetch("/api/services", {
       method: "GET",
     })
@@ -67,7 +67,7 @@ const ServiceStep = ({ onStepNext, onStepBack }) => {
       .then((data) => {
         setServices(data.productPriceData.data);
       });
-  };
+  };*/
 
   useEffect(() => {
     getServices();

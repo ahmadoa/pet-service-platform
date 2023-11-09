@@ -32,7 +32,7 @@ function Appointment() {
   const [currUser, setCurrUser] = useState("");
   const [appointments, setAppointments] = useState([]);
 
-  const RetrieveAppointments = () => {
+  /*const RetrieveAppointments = () => {
     fetch(`/api/orders?userId=${user.uid}`, {
       method: "GET",
     })
@@ -41,7 +41,7 @@ function Appointment() {
         setAppointments(data);
         console.log(data);
       });
-  };
+  };*/
 
   useEffect(() => {
     if (user) {

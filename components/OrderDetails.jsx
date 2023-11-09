@@ -29,7 +29,7 @@ export default function OrderDetails({ orderId, userId }) {
   const { toast } = useToast();
   const [defTab, setDefTab] = useState("details");
 
-  const RetrieveAppointment = () => {
+  /*const RetrieveAppointment = () => {
     fetch(`/api/order?userId=${userId}&orderId=${orderId}`, {
       method: "GET",
     })
@@ -40,7 +40,7 @@ export default function OrderDetails({ orderId, userId }) {
       .then(() => {
         console.log(appointment.Status);
       });
-  };
+  };*/
 
   useEffect(() => {
     if (orderId) {
@@ -60,7 +60,7 @@ export default function OrderDetails({ orderId, userId }) {
     }
   }, [appointment]);
 
-  const handleArchive = async () => {
+  /*const handleArchive = async () => {
     const response = await fetch("/api/archives", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -88,7 +88,7 @@ export default function OrderDetails({ orderId, userId }) {
         description: "Appointment archive failed",
       });
     }
-  };
+  };*/
 
   useEffect(() => {
     setDefTab("details");

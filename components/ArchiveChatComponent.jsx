@@ -39,7 +39,7 @@ function ChatComponent({ userId, orderId, AppointDate, status }) {
   }, [messages]);
 
   // post message to order id / user
-  const PostMessage = async () => {
+  /*const PostMessage = async () => {
     if (message.length != 0) {
       const response = await fetch("/api/messages", {
         method: "POST",
@@ -63,7 +63,7 @@ function ChatComponent({ userId, orderId, AppointDate, status }) {
     } else {
       console.log("fill message input");
     }
-  };
+  };*/
 
   // listening to messages
   useEffect(() => {
