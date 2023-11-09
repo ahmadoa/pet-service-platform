@@ -28,6 +28,7 @@ function Success() {
 
   const session = params.get("session_id");
 
+  // get checkout session of appointment and add payment_intent to appointment info
   const getSession = async (ses, cook) => {
     if (ses && cook) {
       const res = await stripe.checkout.sessions.retrieve(ses);

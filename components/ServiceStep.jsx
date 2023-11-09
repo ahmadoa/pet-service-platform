@@ -13,6 +13,7 @@ const Icons = {
   Training: GiJumpingDog,
 };
 
+// service step
 const ServiceStep = ({ onStepNext, onStepBack }) => {
   const [cookies, setCookie] = useCookies(["appointment"]);
   const [selectedService, setSelectedService] = useState(
@@ -57,6 +58,7 @@ const ServiceStep = ({ onStepNext, onStepBack }) => {
 
   const [services, setServices] = useState([]);
 
+  // get services from db
   const getServices = () => {
     fetch("/api/services", {
       method: "GET",
@@ -73,6 +75,7 @@ const ServiceStep = ({ onStepNext, onStepBack }) => {
     getServices();
   }, []);
 
+  // push data to cookie and move to next step
   const PushAndMove = () => {
     services.map((serve) => {
       if (serve.product.name === selectedService) {
@@ -92,6 +95,7 @@ const ServiceStep = ({ onStepNext, onStepBack }) => {
     }
   };
 
+  // push data to cookie and move to previous step
   const PushAndBack = () => {
     services.map((serve) => {
       if (serve.product.name === selectedService) {

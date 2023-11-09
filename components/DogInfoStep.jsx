@@ -11,6 +11,7 @@ const DogInfo = ({ onStepNext }) => {
 
   const [errors, setErrors] = useState({});
 
+  // validating form inputs and moving to next step
   const validatePushAndMove = () => {
     const newErrors = {};
 

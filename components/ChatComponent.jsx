@@ -88,6 +88,7 @@ function ChatComponent({ userId, orderId, AppointDate, status }) {
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   console.log("Days until appointment:", diffDays);
 
+  // handle enter key
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       PostMessage();

@@ -32,6 +32,7 @@ function Appointment() {
   const [currUser, setCurrUser] = useState("");
   const [appointments, setAppointments] = useState([]);
 
+  // get appointments from db
   const RetrieveAppointments = () => {
     fetch(`/api/orders?userId=${user.uid}`, {
       method: "GET",

@@ -33,6 +33,7 @@ export default function Archives() {
 
   const router = useRouter();
 
+  // get archives from db
   const RetrieveArchives = () => {
     fetch(`/api/archives?userId=${user.uid}`, {
       method: "GET",

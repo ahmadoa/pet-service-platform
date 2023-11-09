@@ -74,6 +74,7 @@ const ScheduleStep = ({ onStepNext, onStepBack }) => {
     selectedDate.getMonth() + 1
   }-${selectedDate.getDate()}`;
 
+  // function that pushes the data to the cookies and moves to the next step
   const PushAndMove = () => {
     setCookie("Date", selectedDate.toISOString(), {
       path: "/",
@@ -105,6 +106,7 @@ const ScheduleStep = ({ onStepNext, onStepBack }) => {
     onStepNext();
   };
 
+  // function that pushes the data to the cookies and moves to the previous step
   const PushAndBack = () => {
     setCookie("Date", selectedDate.toISOString(), {
       path: "/",

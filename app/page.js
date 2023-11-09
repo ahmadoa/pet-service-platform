@@ -41,6 +41,7 @@ export default function Home() {
   const [team, setTeam] = useState([]);
   const { toast } = useToast();
 
+  // sign in handler
   const handleSignIn = async () => {
     try {
       await googleSignIn();
@@ -49,6 +50,7 @@ export default function Home() {
     }
   };
 
+  // get services
   const getServices = () => {
     fetch("/api/services", {
       method: "GET",
@@ -61,6 +63,7 @@ export default function Home() {
       });
   };
 
+  // get team members from db
   const getTeam = () => {
     fetch("/api/team", {
       method: "GET",
@@ -93,6 +96,7 @@ export default function Home() {
     },
   });
 
+  // form submit handler & email sender
   const onSubmit = (data) => {
     const params = {
       name: data.firstname,

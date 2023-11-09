@@ -82,6 +82,7 @@ function ChatComponent({ userId, orderId, AppointDate, status }) {
     });
   }, []);
 
+  // get days until appointment
   const today = new Date();
   const appointDate = new Date(AppointDate);
   const diffTime = today - appointDate;

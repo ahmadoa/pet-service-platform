@@ -43,6 +43,7 @@ export default function Navbar() {
   const [notifications, setNotifications] = useState([]);
   const [popoverOpen, setPopoverOpen] = useState(false);
 
+  // sign in handler
   const handleSignIn = async () => {
     try {
       await googleSignIn();
@@ -51,6 +52,7 @@ export default function Navbar() {
     }
   };
 
+  // sign out handler
   const handleSignOut = async () => {
     try {
       await logOut();
@@ -87,6 +89,7 @@ export default function Navbar() {
     }
   }, [user]);
 
+  // handle notification seen (delete)
   const handleNotifSeen = async (id) => {
     await deleteDoc(doc(db, "users", user.uid, "Notifications", id));
   };

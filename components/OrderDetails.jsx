@@ -29,6 +29,7 @@ export default function OrderDetails({ orderId, userId }) {
   const { toast } = useToast();
   const [defTab, setDefTab] = useState("details");
 
+  // get appointment details from db
   const RetrieveAppointment = () => {
     fetch(`/api/order?userId=${userId}&orderId=${orderId}`, {
       method: "GET",
@@ -60,6 +61,7 @@ export default function OrderDetails({ orderId, userId }) {
     }
   }, [appointment]);
 
+  // archive appointment
   const handleArchive = async () => {
     const response = await fetch("/api/archives", {
       method: "POST",
@@ -94,6 +96,7 @@ export default function OrderDetails({ orderId, userId }) {
     setDefTab("details");
   }, [appointment]);
 
+  // cancel appointment
   const cancelAppointment = async () => {
     const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY);
 

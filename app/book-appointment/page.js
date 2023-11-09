@@ -15,6 +15,7 @@ export default function Appointement() {
   const [services, setServices] = useState([]);
   const router = useRouter();
 
+  // get services
   const getServices = () => {
     fetch("/api/services", {
       method: "GET",
@@ -31,14 +32,17 @@ export default function Appointement() {
     getServices();
   }, []);
 
+  // handle next step
   const handleStepNext = () => {
     setActiveTab((prev) => prev + 1);
   };
 
+  // handle previous step
   const handlePreviousNext = () => {
     setActiveTab((prev) => prev - 1);
   };
 
+  // form multi steps
   const formElements = [
     <DogInfoStep onStepNext={handleStepNext} />,
     <ServiceStep

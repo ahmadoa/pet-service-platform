@@ -8,6 +8,7 @@ export default function ArchiveDetails({ orderId, userId }) {
   const date = new Date(archive.Date);
   const [defTab, setDefTab] = useState("details");
 
+  // get archive details from db
   const RetrieveArchive = () => {
     fetch(`/api/archive?orderId=${orderId}&userId=${userId}`, {
       method: "GET",

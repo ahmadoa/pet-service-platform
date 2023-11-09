@@ -22,6 +22,7 @@ function AppointmentDetails({ onStepBack }) {
   const [price, setPrice] = useState(0);
   const [services, setServices] = useState([]);
 
+  // get services from db
   const getServices = () => {
     fetch("/api/services", {
       method: "GET",
