@@ -12,6 +12,7 @@ import { auth } from "@/lib/firebase";
 import Select from "@/components/ui/Select_Animation";
 import { motion } from "framer-motion";
 import NoData from "@/components/ui/no-data";
+import { Button } from "@/components/ui/button";
 
 const Icons = {
   Grooming: HiScissors,
@@ -98,7 +99,7 @@ export default function Archives() {
 
   return (
     <div className="w-full h-full grid grid-cols-12 gap-1">
-      {archives ? (
+      {archives.length > 0 ? (
         <>
           <motion.div
             initial={{ opacity: 0 }}
@@ -215,7 +216,7 @@ export default function Archives() {
             </div>
             <p className="w-5/6 text-sm text-muted-foreground text-center">
               You haven't archived any appointments yet. Click the button below
-              to track your appointment.
+              to track your appointments.
             </p>
             <div className="flex items-center gap-5">
               <Button

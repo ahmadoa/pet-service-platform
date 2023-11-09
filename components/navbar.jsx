@@ -117,6 +117,14 @@ export default function Navbar() {
             </Link>
             <Link
               className={`${
+                pathname === "/#About" ? "font-bold " : ""
+              }  transition-all hover:scale-105`}
+              href={"/#About"}
+            >
+              About
+            </Link>
+            <Link
+              className={`${
                 pathname === "/#Services" ? "font-bold " : ""
               }  transition-all hover:scale-105`}
               href={"/#Services"}
@@ -198,7 +206,7 @@ export default function Navbar() {
               </button>
             </PopoverTrigger>
             <PopoverContent
-              className=" h-80 max-h-80 flex flex-col gap-3 p-3 overflow-y-scroll items-center justify-center"
+              className="max-h-80 flex flex-col gap-3 p-3 overflow-y-scroll items-center justify-center"
               align="start"
             >
               {notifications.length > 0 ? (

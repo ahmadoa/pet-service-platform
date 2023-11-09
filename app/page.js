@@ -32,11 +32,14 @@ import {
 } from "react-icons/bi";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
+import { useToast } from "@/components/ui/use-toast";
+import { cn } from "@/lib/utils";
 
 export default function Home() {
   const [services, setServices] = useState([]);
   const { user, googleSignIn } = UserAuth();
   const [team, setTeam] = useState([]);
+  const { toast } = useToast();
 
   const handleSignIn = async () => {
     try {
@@ -77,6 +80,7 @@ export default function Home() {
 
   const {
     register,
+    reset,
     handleSubmit,
     formState: { isSubmitted },
   } = useForm({
@@ -100,7 +104,18 @@ export default function Home() {
     fetch("/api/send-email", {
       method: "POST",
       body: JSON.stringify(params),
-    }).then((res) => console.log(res));
+    }).then((res) => {
+      if (res.ok) {
+        reset();
+        toast({
+          className: cn(
+            "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4"
+          ),
+          title: "Email Sent Successfully!",
+          description: "Thank you for contacting us, we will get back to you.",
+        });
+      }
+    });
   };
 
   const variants = {
@@ -247,6 +262,33 @@ export default function Home() {
         </div>
       </motion.div>
       <div className="w-full h-[3px] bg-secondary-foreground opacity-[2%] my-5" />
+      <motion.section
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1, transition: { duration: 0.5 } }}
+        id="About"
+        className="mx-7"
+      >
+        <div className="w-full bg-about bg-no-repeat bg-cover rounded-xl p-16 grid grid-cols-2 gap-32">
+          <div className="grid grid-rows-2 gap-5 font-medium">
+            <div>
+              Welcome to our dog-loving community! We're on a mission to provide
+              top-notch care & services for your furry friends, ensuring a
+              tail-wagging experience with personalized attention to their
+              well-being.
+            </div>
+            <div>
+              Whether it's daycare, training, boarding, or grooming, we've got
+              your pup covered. Join us in creating a joyful haven where dogs
+              thrive, tails wag, and pet parents find peace of mind.
+            </div>
+          </div>
+          <div className="w-5/6 text-3xl font-bold leading-normal">
+            Our mission goes beyond providing pet services, it's about creating
+            joyful memories.
+          </div>
+        </div>
+      </motion.section>
+
       {/* services section */}
       <motion.section
         initial={{ opacity: 0 }}
@@ -297,9 +339,10 @@ export default function Home() {
                 <div className="w-9/12 h-24 rounded-e-xl overflow-hidden relative">
                   <Image
                     src={serve.product.images[0]}
-                    objectFit="cover"
-                    layout="fill"
+                    fill
                     sizes=""
+                    className="object-cover"
+                    alt="service image"
                   />
                 </div>
               </motion.div>

@@ -20,6 +20,7 @@ module.exports = {
     extend: {
       backgroundImage: {
         chat: "url('../public/chatbg.png')",
+        about: "url('../public/aboutBG.png')",
       },
       spacing: {
         "under-nav": "calc(100vh - 3.5rem)",
