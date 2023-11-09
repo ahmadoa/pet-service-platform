@@ -8,7 +8,11 @@ export async function GET(req) {
     const user_id = searchParams.get("userId");
     const order_id = searchParams.get("orderId");
 
+    console.log("user_id", user_id);
+    console.log("order_id", order_id);
+
     const docSnap = await getDoc(doc(db, "users", user_id, "Orders", order_id));
+    console.log("docSnap", docSnap.data());
 
     if (docSnap.exists()) {
       return new Response(JSON.stringify(docSnap.data()));
@@ -17,7 +21,7 @@ export async function GET(req) {
     }
   } catch (error) {
     return new Response(
-      JSON.stringify({ error: "Failed to retrieve appointment" })
+      JSON.stringify({ error: `Failed to retrieve appointment ${error}` })
     );
   }
 }
