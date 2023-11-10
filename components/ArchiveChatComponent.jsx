@@ -21,7 +21,7 @@ function ChatComponent({ userId, orderId, AppointDate, status }) {
       if (user) {
         setCurrUser(user);
       } else {
-        router.push("/login");
+        router.push("/");
       }
     });
   };
