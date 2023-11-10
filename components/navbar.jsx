@@ -223,7 +223,7 @@ export default function Navbar() {
               className={`h-80 max-h-80 flex flex-col gap-3 p-3 overflow-y-scroll ${
                 notifications.length === 0 && "justify-center items-center"
               }}`}
-              align="start"
+              align="end"
             >
               {notifications.length > 0 ? (
                 <>
