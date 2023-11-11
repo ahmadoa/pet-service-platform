@@ -110,9 +110,9 @@ export default function Archives() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="h-full col-span-3"
+            className="h-full col-span-3 overflow-hidden"
           >
-            <div className="h-full flex flex-col gap-3">
+            <div className="h-full flex flex-col gap-3 overflow-y-auto">
               <div className="w-full h-12 flex items-center text-secondary-foreground text-lg bg-card rounded-xl font-bold p-5 shadow-sm">
                 All Archived Appointments
               </div>
@@ -121,65 +121,71 @@ export default function Archives() {
                 initial="hidden"
                 animate="show"
                 key={archives.length}
-                className="h-full flex flex-col gap-3 overflow-scroll disable-scrollbars"
+                className="h-[calc(100vh-3.75rem)]  relative"
               >
-                {archives.map((archive) => (
-                  <motion.div
-                    key={archive.orderId}
-                    variants={Item}
-                    className={`w-full h-[4.5rem] flex gap-2 ${
-                      selectedArchive === archive.orderId
-                        ? "bg-muted"
-                        : "bg-card"
-                    } bg-card hover:bg-muted transition-colors rounded-xl font-semibold p-2 shadow-sm relative cursor-pointer`}
-                    onClick={() => {
-                      router.push(`/archives?id=${archive.orderId}`);
-                      setSelectedArchive(archive.orderId);
-                    }}
-                  >
-                    <div
-                      className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 transition-all w-4/6 h-1 rounded-t-full ${
-                        selectedArchive === archive.orderId
-                          ? "bg-orange-500"
-                          : "bg-card"
-                      }`}
-                    />
-                    <div className="h-full w-16 bg-primary/10 rounded-xl flex justify-center items-center">
-                      <ServiceIcon serviceType={archive.Service} />
-                    </div>
-                    <div className="w-full flex flex-col justify-between py-1 pr-1">
-                      <div className="flex gap-1 items-center justify-between">
-                        <div className="flex items-center gap-1">
-                          <div className="font-medium">{archive.Service}</div>
-                          <div className="text-sm font-medium text-muted-foreground">
-                            - for {archive.name}
+                <div className="absolute inset-0 overflow-auto disable-scrollbars">
+                  <div className="flex flex-col gap-3">
+                    {archives.map((archive) => (
+                      <motion.div
+                        key={archive.orderId}
+                        variants={Item}
+                        className={`w-full h-[4.5rem] flex gap-2 ${
+                          selectedArchive === archive.orderId
+                            ? "bg-muted"
+                            : "bg-card"
+                        } bg-card hover:bg-muted transition-colors rounded-xl font-semibold p-2 shadow-sm relative cursor-pointer`}
+                        onClick={() => {
+                          router.push(`/archives?id=${archive.orderId}`);
+                          setSelectedArchive(archive.orderId);
+                        }}
+                      >
+                        <div
+                          className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 transition-all w-4/6 h-1 rounded-t-full ${
+                            selectedArchive === archive.orderId
+                              ? "bg-orange-500"
+                              : "bg-card"
+                          }`}
+                        />
+                        <div className="h-full w-16 bg-primary/10 rounded-xl flex justify-center items-center">
+                          <ServiceIcon serviceType={archive.Service} />
+                        </div>
+                        <div className="w-full flex flex-col justify-between py-1 pr-1">
+                          <div className="flex gap-1 items-center justify-between">
+                            <div className="flex items-center gap-1">
+                              <div className="font-medium">
+                                {archive.Service}
+                              </div>
+                              <div className="text-sm font-medium text-muted-foreground">
+                                - for {archive.name}
+                              </div>
+                            </div>
+                            <div className="text-orange-500">
+                              {archive.TotalPaid / 100} $
+                            </div>
+                          </div>
+                          <div className="flex gap-1 items-center">
+                            <div
+                              className={`w-2 h-2 rounded-full ${
+                                archive.Status === "Fulfilled"
+                                  ? "bg-green-600"
+                                  : "bg-primary"
+                              } `}
+                            />
+                            <div
+                              className={`${
+                                archive.Status === "Fulfilled"
+                                  ? "text-green-600"
+                                  : "text-primary"
+                              } font-semibold text-sm uppercase`}
+                            >
+                              {archive.Status}
+                            </div>
                           </div>
                         </div>
-                        <div className="text-orange-500">
-                          {archive.TotalPaid / 100} $
-                        </div>
-                      </div>
-                      <div className="flex gap-1 items-center">
-                        <div
-                          className={`w-2 h-2 rounded-full ${
-                            archive.Status === "Fulfilled"
-                              ? "bg-green-600"
-                              : "bg-primary"
-                          } `}
-                        />
-                        <div
-                          className={`${
-                            archive.Status === "Fulfilled"
-                              ? "text-green-600"
-                              : "text-primary"
-                          } font-semibold text-sm uppercase`}
-                        >
-                          {archive.Status}
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
               </motion.div>
             </div>
           </motion.div>

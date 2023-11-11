@@ -119,68 +119,74 @@ function Appointment() {
                 variants={variants}
                 initial="hidden"
                 animate="show"
-                className="h-full flex flex-col gap-3 overflow-scroll disable-scrollbars"
+                className="h-[calc(100vh-3.75rem)]  relative"
                 key={appointments.length}
               >
-                {appointments.map((appointment) => (
-                  <div
-                    key={appointment.orderId}
-                    variants={Item}
-                    className={`w-full h-[4.5rem] flex gap-2 ${
-                      selectedAppointment === appointment.orderId
-                        ? "bg-muted"
-                        : "bg-card"
-                    } bg-card hover:bg-muted transition-colors rounded-xl font-semibold p-2 shadow-sm relative cursor-pointer`}
-                    onClick={() => {
-                      router.push(`/appointments?id=${appointment.orderId}`);
-                      setSelectedAppointment(appointment.orderId);
-                    }}
-                  >
-                    <div
-                      className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 transition-all w-4/6 h-1 rounded-t-full ${
-                        selectedAppointment === appointment.orderId
-                          ? "bg-orange-500"
-                          : "bg-card"
-                      }`}
-                    />
-                    <div className="h-full w-16 bg-primary/10 rounded-xl flex justify-center items-center">
-                      <ServiceIcon serviceType={appointment.Service} />
-                    </div>
-                    <div className="w-full flex flex-col justify-between py-1 pr-1">
-                      <div className="flex gap-1 items-center justify-between">
-                        <div className="flex items-center gap-1">
-                          <div className="font-medium">
-                            {appointment.Service}
-                          </div>
-                          <div className="text-sm font-medium text-muted-foreground">
-                            - for {appointment.name}
-                          </div>
-                        </div>
-                        <div className="text-orange-500">
-                          {appointment.TotalPaid / 100} $
-                        </div>
-                      </div>
-                      <div className="flex gap-1 items-center">
+                <div className="absolute inset-0 overflow-auto disable-scrollbars">
+                  <div className="flex flex-col gap-3">
+                    {appointments.map((appointment) => (
+                      <div
+                        key={appointment.orderId}
+                        variants={Item}
+                        className={`w-full h-[4.5rem] flex gap-2 ${
+                          selectedAppointment === appointment.orderId
+                            ? "bg-muted"
+                            : "bg-card"
+                        } bg-card hover:bg-muted transition-colors rounded-xl font-semibold p-2 shadow-sm relative cursor-pointer`}
+                        onClick={() => {
+                          router.push(
+                            `/appointments?id=${appointment.orderId}`
+                          );
+                          setSelectedAppointment(appointment.orderId);
+                        }}
+                      >
                         <div
-                          className={`w-2 h-2 rounded-full ${
-                            appointment.Status === "Fulfilled"
-                              ? "bg-green-600"
-                              : "bg-primary"
-                          } `}
+                          className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 transition-all w-4/6 h-1 rounded-t-full ${
+                            selectedAppointment === appointment.orderId
+                              ? "bg-orange-500"
+                              : "bg-card"
+                          }`}
                         />
-                        <div
-                          className={`${
-                            appointment.Status === "Fulfilled"
-                              ? "text-green-600"
-                              : "text-primary"
-                          } font-semibold text-sm uppercase`}
-                        >
-                          {appointment.Status}
+                        <div className="h-full w-16 bg-primary/10 rounded-xl flex justify-center items-center">
+                          <ServiceIcon serviceType={appointment.Service} />
+                        </div>
+                        <div className="w-full flex flex-col justify-between py-1 pr-1">
+                          <div className="flex gap-1 items-center justify-between">
+                            <div className="flex items-center gap-1">
+                              <div className="font-medium">
+                                {appointment.Service}
+                              </div>
+                              <div className="text-sm font-medium text-muted-foreground">
+                                - for {appointment.name}
+                              </div>
+                            </div>
+                            <div className="text-orange-500">
+                              {appointment.TotalPaid / 100} $
+                            </div>
+                          </div>
+                          <div className="flex gap-1 items-center">
+                            <div
+                              className={`w-2 h-2 rounded-full ${
+                                appointment.Status === "Fulfilled"
+                                  ? "bg-green-600"
+                                  : "bg-primary"
+                              } `}
+                            />
+                            <div
+                              className={`${
+                                appointment.Status === "Fulfilled"
+                                  ? "text-green-600"
+                                  : "text-primary"
+                              } font-semibold text-sm uppercase`}
+                            >
+                              {appointment.Status}
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    ))}
                   </div>
-                ))}
+                </div>
               </motion.div>
             </div>
           </motion.div>
