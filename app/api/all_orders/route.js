@@ -3,7 +3,7 @@ import { collection, getDocs } from "firebase/firestore";
 
 export async function GET() {
   try {
-    const appointmentsCollectionRef = collection(db, "Appointments");
+    const appointmentsCollectionRef = collection(db, "Orders");
 
     // Get all documents from the "appointments" collection
     const querySnapshot = await getDocs(appointmentsCollectionRef);

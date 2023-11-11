@@ -56,7 +56,7 @@ function Success() {
           }),
         });
         if (response.ok) {
-          const data = await response.json();
+          removeCookie("appointment", { path: "/" });
           removeCookie("Allergies", { path: "/" });
           removeCookie("Breed", { path: "/" });
           removeCookie("Date", { path: "/" });

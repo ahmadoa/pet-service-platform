@@ -5,6 +5,7 @@ import { FaDog } from "react-icons/fa";
 import { GiDogHouse, GiJumpingDog } from "react-icons/gi";
 import { motion } from "framer-motion";
 import { useCookies } from "react-cookie";
+import { useRouter } from "next/navigation";
 
 const Icons = {
   Grooming: HiScissors,
@@ -15,7 +16,7 @@ const Icons = {
 
 // service step
 const ServiceStep = ({ onStepNext, onStepBack }) => {
-  const [cookies, setCookie] = useCookies(["appointment"]);
+  const [cookies, setCookie, removeCookie] = useCookies(["appointment"]);
   const [selectedService, setSelectedService] = useState(
     cookies.Service || "Grooming"
   );
@@ -115,6 +116,20 @@ const ServiceStep = ({ onStepNext, onStepBack }) => {
     }
   };
 
+  const router = useRouter();
+  const handleCancellation = () => {
+    removeCookie("appointment", { path: "/" });
+    removeCookie("Allergies", { path: "/" });
+    removeCookie("Breed", { path: "/" });
+    removeCookie("Date", { path: "/" });
+    removeCookie("Duration", { path: "/" });
+    removeCookie("Name", { path: "/" });
+    removeCookie("PriceID", { path: "/" });
+    removeCookie("Service", { path: "/" });
+    removeCookie("Special", { path: "/" });
+    router.push("/");
+  };
+
   return (
     <motion.div
       className="w-full h-full flex flex-col px-16"
@@ -124,10 +139,22 @@ const ServiceStep = ({ onStepNext, onStepBack }) => {
         duration: 0.5,
       }}
     >
-      <div className="text-secondary-foreground/50 text-sm font-medium">
-        Step 2 of 3
+      <div className="w-full flex justify-between">
+        <div className="flex flex-col">
+          <div className="text-secondary-foreground/50 text-sm font-medium">
+            Step 2 of 3
+          </div>
+          <div className="text-3xl font-bold">
+            Select a service for your dog
+          </div>
+        </div>
+        <Button
+          className="bg-yellow-300 hover:bg-yellow-400"
+          onClick={handleCancellation}
+        >
+          Cancel appointment
+        </Button>
       </div>
-      <div className="text-3xl font-bold">Select a service for your dog</div>
       <form
         className="h-full w-full flex flex-col"
         onSubmit={(e) => {

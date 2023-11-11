@@ -2,9 +2,10 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 import { useCookies } from "react-cookie";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 const DogInfo = ({ onStepNext }) => {
-  const [cookies, setCookie] = useCookies(["appointment"]);
+  const [cookies, setCookie, removeCookie] = useCookies(["appointment"]);
   const [name, setName] = useState(cookies.Name || "");
   const [breed, setBreed] = useState(cookies.Breed || "");
   const [allergies, setAllergies] = useState(cookies.Allergies || "");
@@ -40,6 +41,20 @@ const DogInfo = ({ onStepNext }) => {
     }
   };
 
+  const router = useRouter();
+  const handleCancellation = () => {
+    removeCookie("appointment", { path: "/" });
+    removeCookie("Allergies", { path: "/" });
+    removeCookie("Breed", { path: "/" });
+    removeCookie("Date", { path: "/" });
+    removeCookie("Duration", { path: "/" });
+    removeCookie("Name", { path: "/" });
+    removeCookie("PriceID", { path: "/" });
+    removeCookie("Service", { path: "/" });
+    removeCookie("Special", { path: "/" });
+    router.push("/");
+  };
+
   return (
     <motion.div
       className="w-full h-full flex flex-col px-16"
@@ -49,10 +64,21 @@ const DogInfo = ({ onStepNext }) => {
         duration: 0.5,
       }}
     >
-      <div className="text-secondary-foreground/50 text-sm font-medium">
-        Step 1 of 3
+      <div className="w-full flex justify-between">
+        <div className="flex flex-col">
+          <div className="text-secondary-foreground/50 text-sm font-medium">
+            Step 1 of 3
+          </div>
+          <div className="text-3xl font-bold">Tell Us About Your Dog</div>
+        </div>
+        <Button
+          className="bg-yellow-300 hover:bg-yellow-400"
+          onClick={handleCancellation}
+        >
+          Cancel appointment
+        </Button>
       </div>
-      <div className="text-3xl font-bold">Tell Us About Your Dog</div>
+
       <form
         className="h-full w-full flex flex-col"
         onSubmit={(e) => {

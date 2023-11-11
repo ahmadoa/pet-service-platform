@@ -18,7 +18,7 @@ import {
 import { loadStripe } from "@stripe/stripe-js";
 
 function AppointmentDetails({ onStepBack }) {
-  const [cookies, setCookie] = useCookies(["appointment"]);
+  const [cookies, setCookie, removeCookie] = useCookies(["appointment"]);
   const [price, setPrice] = useState(0);
   const [services, setServices] = useState([]);
 
@@ -53,6 +53,15 @@ function AppointmentDetails({ onStepBack }) {
 
   const router = useRouter();
   const handleCancellation = () => {
+    removeCookie("appointment", { path: "/" });
+    removeCookie("Allergies", { path: "/" });
+    removeCookie("Breed", { path: "/" });
+    removeCookie("Date", { path: "/" });
+    removeCookie("Duration", { path: "/" });
+    removeCookie("Name", { path: "/" });
+    removeCookie("PriceID", { path: "/" });
+    removeCookie("Service", { path: "/" });
+    removeCookie("Special", { path: "/" });
     router.push("/");
   };
 
