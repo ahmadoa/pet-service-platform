@@ -220,7 +220,7 @@ export default function Navbar() {
               </button>
             </PopoverTrigger>
             <PopoverContent
-              className={`h-80 max-h-80 flex flex-col gap-3 p-3 overflow-y-scroll ${
+              className={`h-80 max-h-80 flex flex-col gap-3 p-3 overflow-y-auto${
                 notifications.length === 0 && "justify-center items-center"
               }}`}
               align="end"
