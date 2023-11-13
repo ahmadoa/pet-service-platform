@@ -227,7 +227,7 @@ export default function Navbar() {
             >
               {notifications.length > 0 ? (
                 <>
-                  <div className="flex justify-between items-center">
+                  <div className="flex justify-between items-center disable-scrollbars">
                     <div className="text-lg font-semibold">Notifications</div>
                     <button
                       onClick={deleteAllNotifs}
@@ -236,7 +236,7 @@ export default function Navbar() {
                       Clear all
                     </button>
                   </div>
-                  <div className="h-72 max-h-72 flex flex-col gap-2 overflow-y-scroll">
+                  <div className="h-72 max-h-72 flex flex-col gap-2 overflow-y-scroll disable-scrollbars">
                     {notifications.map((notif) => (
                       <Link
                         href={notif.href}
@@ -244,7 +244,7 @@ export default function Navbar() {
                           setPopoverOpen(false);
                           handleNotifSeen(notif.id);
                         }}
-                        className="w-full p-2 flex gap-2 transition-all hover:bg-secondary-foreground/10 rounded-xl whitespace-nowrap"
+                        className="w-full p-2 flex gap-2 transition-all hover:bg-secondary-foreground/10 rounded-xl whitespace-nowrap overflow-hidden"
                         key={notif.id}
                       >
                         {notif.type === "fulfilled" ? (
