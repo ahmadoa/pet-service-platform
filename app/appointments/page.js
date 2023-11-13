@@ -109,9 +109,9 @@ function Appointment() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="h-full col-span-3"
+            className="h-full col-span-3 overflow-hidden"
           >
-            <div className="h-full flex flex-col gap-3">
+            <div className="h-full flex flex-col gap-3 overflow-y-auto">
               <div className="w-full h-12 flex items-center text-lg bg-card rounded-xl font-bold p-5 shadow-sm">
                 All Appointments
               </div>
@@ -119,7 +119,7 @@ function Appointment() {
                 variants={variants}
                 initial="hidden"
                 animate="show"
-                className="h-[calc(100vh-3.75rem)]  relative"
+                className="h-[calc(100vh-3.75rem)] relative"
                 key={appointments.length}
               >
                 <div className="absolute inset-0 overflow-auto disable-scrollbars">
